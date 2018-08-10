@@ -1,7 +1,7 @@
 {
   "name": "blissue",
   "short_name": "blissue",
-  "start_url": "/",
+  "start_url": "/blissue",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#fff",
