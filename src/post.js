@@ -1,5 +1,5 @@
 export default ({ post, posts }) => (
-	<h3>
+	<div>
 		{post}
-	</h3>
+	</div>
 );

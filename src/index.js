@@ -30,13 +30,15 @@ export default class App extends Component {
 	render(_, { posts, author }) {
 		return (
 			<div>
-				<h1 className="has-text-centered">{author + `'`}s blog</h1>
+				<h1 className="has-text-centered is-blog-title">{author + `'`}s blog</h1>
 				<main>
 					<Router>
 						<Home path={`/${BLOG_NAME}`} posts={posts} />
 						<Post path={`/${BLOG_NAME}/:post`} posts={posts} />
 					</Router>
 				</main>
+				<footer>
+				</footer>
 			</div>
 		);
 	}

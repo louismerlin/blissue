@@ -11,3 +11,13 @@ main {
 .has-text-centered {
 	text-align: center;
 }
+
+.is-blog-title {
+	font-size: 4em;
+	text-shadow: 2px 2px 1px #999999;
+}
+
+.is-post-title {
+	font-size: 3em;
+
+}
