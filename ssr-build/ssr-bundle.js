@@ -583,9 +583,8 @@ var index_App = function (_Component) {
 			Object(preact_min["h"])(
 				'h1',
 				null,
-				'Welcome to the blog of ',
-				author,
-				' !'
+				author + '\'',
+				's blog'
 			),
 			Object(preact_min["h"])(
 				preact_router_es_Router,
