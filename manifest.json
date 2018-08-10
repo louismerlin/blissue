@@ -1,12 +1,16 @@
 {
-  "name": "preact-cli app",
-  "start_url": "/",
+  "name": "blissue",
+  "short_name": "blissue",
+  "start_url": "/blissue",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#fff",
   "theme_color": "#673ab8",
-  "icons": [{
-    "src": "/assets/icon.png",
-    "type": "image/png",
-    "sizes": "512x512"
-  }]
+  "icons": [
+    {
+      "src": "/assets/icon.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
 }
