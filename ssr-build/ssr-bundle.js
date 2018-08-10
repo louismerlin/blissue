@@ -58,7 +58,7 @@ module.exports =
 /******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
 /******/
 /******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "/blissue";
+/******/ 	__webpack_require__.p = "/undefined";
 /******/
 /******/ 	// Load entry module and return exports
 /******/ 	return __webpack_require__(__webpack_require__.s = "JkW7");
@@ -484,11 +484,13 @@ preact_router_es_Router.Link = preact_router_es_Link;
 });
 // CONCATENATED MODULE: ./post.js
 
-/* harmony default export */ var post_0 = (function (props) {
+/* harmony default export */ var post_0 = (function (_ref) {
+	var post = _ref.post,
+	    posts = _ref.posts;
 	return Object(preact_min["h"])(
 		"h3",
 		null,
-		props.post
+		post
 	);
 });
 // CONCATENATED MODULE: ./utils.js
@@ -534,6 +536,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
+var USERNAME = 'louismerlin';
+var BLOG_NAME = 'blissue';
+
 var index_App = function (_Component) {
 	_inherits(App, _Component);
 
@@ -555,7 +560,7 @@ var index_App = function (_Component) {
 	App.prototype.componentDidMount = function componentDidMount() {
 		var _this2 = this;
 
-		req('https://api.github.com/repos/louismerlin/blissue/issues').then(function (issues) {
+		req('https://api.github.com/repos/' + USERNAME + '/' + BLOG_NAME + '/issues').then(function (issues) {
 			_this2.setState({
 				posts: issues.filter(function (i) {
 					return i.author_association === 'OWNER';
@@ -589,8 +594,8 @@ var index_App = function (_Component) {
 			Object(preact_min["h"])(
 				preact_router_es_Router,
 				null,
-				Object(preact_min["h"])(home, { path: '/', posts: posts }),
-				Object(preact_min["h"])(post_0, { path: '/:post', posts: posts })
+				Object(preact_min["h"])(home, { path: '/' + BLOG_NAME, posts: posts }),
+				Object(preact_min["h"])(post_0, { path: '/' + BLOG_NAME + '/:post', posts: posts })
 			)
 		);
 	};
