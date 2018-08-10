@@ -9,9 +9,8 @@ export default class App extends Component {
 	}
 	componentDidMount() {
 		req(`https://api.github.com/repos/louismerlin/blissue/issues`).then(issues => {
-			console.log(issues)
 			this.setState({
-				posts: issues.filter(i => i.author_association === 'OWNER').map(i => ({body: i.body})),
+				posts: issues.filter(i => i.author_association === 'OWNER').map(i => ({ body: i.body })),
 				author: issues.find(i => i.author_association === 'OWNER').user.login
 			});
 		});
