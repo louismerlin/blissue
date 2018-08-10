@@ -3,6 +3,11 @@ html, body {
 	font-weight: 400;
 }
 
-h1 {
+main {
+	margin: 0 auto;
+	max-width: 640px;
+}
+
+.has-text-centered {
 	text-align: center;
 }
