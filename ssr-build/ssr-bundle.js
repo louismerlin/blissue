@@ -1739,8 +1739,8 @@ preact_router_es_Router.Link = preact_router_es_Link;
 				"div",
 				{ className: "post-in-list" },
 				Object(preact_min["h"])(
-					"h3",
-					null,
+					"h1",
+					{ className: "is-post-title" },
 					post.title
 				),
 				Object(preact_min["h"])(post.body, null)
@@ -1754,7 +1754,7 @@ preact_router_es_Router.Link = preact_router_es_Link;
 	var post = _ref.post,
 	    posts = _ref.posts;
 	return Object(preact_min["h"])(
-		"h3",
+		"div",
 		null,
 		post
 	);
@@ -1860,7 +1860,7 @@ var index_App = function (_Component) {
 			null,
 			Object(preact_min["h"])(
 				'h1',
-				{ className: 'has-text-centered' },
+				{ className: 'has-text-centered is-blog-title' },
 				author + '\'',
 				's blog'
 			),
