@@ -37,8 +37,6 @@ export default class App extends Component {
 						<Post path={`/${BLOG_NAME}/:post`} posts={posts} />
 					</Router>
 				</main>
-				<footer>
-				</footer>
 			</div>
 		);
 	}
