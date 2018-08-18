@@ -1336,6 +1336,54 @@ module.exports =
 
 /***/ }),
 
+/***/ "5D9O":
+/***/ (function(module, exports, __webpack_require__) {
+
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+if (false) {
+  var REACT_ELEMENT_TYPE = typeof Symbol === 'function' && Symbol.for && Symbol.for('react.element') || 0xeac7;
+
+  var isValidElement = function isValidElement(object) {
+    return typeof object === 'object' && object !== null && object.$$typeof === REACT_ELEMENT_TYPE;
+  };
+
+  // By explicitly using `prop-types` you are opting into new development behavior.
+  // http://fb.me/prop-types-in-prod
+  var throwOnDirectAccess = true;
+  module.exports = require('./factoryWithTypeCheckers')(isValidElement, throwOnDirectAccess);
+} else {
+  // By explicitly using `prop-types` you are opting into new production behavior.
+  // http://fb.me/prop-types-in-prod
+  module.exports = __webpack_require__("wVGV")();
+}
+
+/***/ }),
+
+/***/ "Asjh":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+
+
+var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
+
+module.exports = ReactPropTypesSecret;
+
+/***/ }),
+
 /***/ "FWi5":
 /***/ (function(module, exports) {
 
@@ -1789,9 +1837,9 @@ var req = function req(url) {
 var preact_markdown = __webpack_require__("VidE");
 var preact_markdown_default = /*#__PURE__*/__webpack_require__.n(preact_markdown);
 
-// EXTERNAL MODULE: ../node_modules/universal-ga/lib/analytics.js
-var analytics = __webpack_require__("Ngl/");
-var analytics_default = /*#__PURE__*/__webpack_require__.n(analytics);
+// EXTERNAL MODULE: ../node_modules/react-ga/dist/react-ga.js
+var react_ga = __webpack_require__("Z70r");
+var react_ga_default = /*#__PURE__*/__webpack_require__.n(react_ga);
 
 // CONCATENATED MODULE: ./index.js
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return index_App; });
@@ -1836,7 +1884,8 @@ var index_App = function (_Component) {
 	App.prototype.componentDidMount = function componentDidMount() {
 		var _this2 = this;
 
-		analytics_default.a.initialize('UA-105326072-5');
+		react_ga_default.a.initialize('UA-105326072-5');
+		react_ga_default.a.pageview(window.location.pathname + window.location.search);
 		req('https://api.github.com/repos/' + USERNAME + '/' + BLOG_NAME + '/issues').then(function (issues) {
 			_this2.setState({
 				posts: issues.filter(function (i) {
@@ -2091,254 +2140,6 @@ var index_App = function (_Component) {
 
 /***/ }),
 
-/***/ "Ngl/":
-/***/ (function(module, exports, __webpack_require__) {
-
-var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
- * universal-ga v1.2.0
- * https://github.com/daxko/universal-ga 
- *
- * Copyright (c) 2017 Daxko
- * MIT License
- */
-
-(function (global) {
-  'use strict';
-
-  function warn(s) {
-    console.warn('[analytics]', s);
-  }
-
-  function _set() {
-    var args = [],
-        length = arguments.length,
-        i = 0;
-
-    for (; i < length; i++) {
-      args.push(arguments[i]);
-    }
-
-    while (typeof args[args.length - 1] === 'undefined') {
-      args.pop();
-    }
-
-    /* jshint validthis: true */
-    if (this._namespace) {
-      args[0] = this._namespace + '.' + args[0];
-      this._namespace = null;
-    }
-
-    if (window && typeof window.ga === 'function') {
-      window.ga.apply(undefined, args);
-    }
-  }
-
-  var Analytics = function Analytics() {
-    return this;
-  };
-
-  Analytics.prototype = {
-
-    initialize: function initialize(trackingID, options) {
-      var src = 'https://www.google-analytics.com/';
-
-      if (typeof trackingID === 'object') {
-        options = trackingID;
-      }
-
-      options = options || {};
-
-      if (options.debug) {
-        src += 'analytics_debug.js';
-        delete options.debug;
-      } else {
-        src += 'analytics.js';
-      }
-
-      /* jshint ignore:start */
-      (function (i, s, o, g, r, a, m) {
-        i['GoogleAnalyticsObject'] = r;
-        i[r] = i[r] || function () {
-          (i[r].q = i[r].q || []).push(arguments);
-        }, i[r].l = 1 * new Date();
-        a = s.createElement(o), m = s.getElementsByTagName(o)[0];
-        a.async = 1;
-        a.src = g;
-        m.parentNode.insertBefore(a, m);
-      })(window, document, 'script', src, 'ga');
-      /* jshint ignore:end */
-
-      if (trackingID) {
-        options = JSON.stringify(options) === "{}" ? undefined : options;
-        this.create(trackingID, options);
-      }
-    },
-
-    create: function create(trackingID, options) {
-      if (!trackingID) {
-        warn('tracking id is required to initialize.');
-        return;
-      }
-
-      _set.call(this, 'create', trackingID, 'auto', options);
-    },
-
-    name: function name(_name) {
-      var self = new Analytics();
-      self._namespace = _name;
-      return self;
-    },
-
-    set: function set(key, value) {
-      if (!key || !key.length) {
-        warn('set: `key` is required.');
-        return;
-      }
-
-      _set.call(this, 'set', key, value);
-
-      return this;
-    },
-
-    plugin: function plugin(name, options) {
-      if (!name || !name.length) {
-        warn('plugin: `name` is required.');
-        return;
-      }
-
-      _set.call(this, 'require', name, options);
-
-      return this;
-    },
-
-    // https://developers.google.com/analytics/devguides/collection/analyticsjs/pages
-    pageview: function pageview(path, options) {
-      _set.call(this, 'send', 'pageview', path, options);
-
-      return this;
-    },
-
-    // https://developers.google.com/analytics/devguides/collection/analyticsjs/screens
-    screenview: function screenview(screenName, options) {
-      if (!screenName) {
-        warn('screenview: `screenName` is required.');
-        return;
-      }
-
-      options = options || {};
-      options.screenName = screenName;
-      _set.call(this, 'send', 'screenview', options);
-
-      return this;
-    },
-
-    // https://developers.google.com/analytics/devguides/collection/analyticsjs/events
-    event: function event(category, action, options) {
-      if (!category || !action) {
-        warn('event: both `category` and `action` are required.');
-        return;
-      }
-
-      if (options && typeof options.eventValue !== 'undefined' && typeof options.eventValue !== 'number') {
-        warn('event: expected `options.eventValue` to be a Number.');
-        options.eventValue = undefined;
-      }
-
-      if (options && options.nonInteraction && typeof options.nonInteraction !== 'boolean') {
-        warn('event: expected `options.nonInteraction` to be a boolean.');
-        options.nonInteraction = false;
-      }
-
-      _set.call(this, 'send', 'event', category, action, options);
-
-      return this;
-    },
-
-    // https://developers.google.com/analytics/devguides/collection/analyticsjs/user-timings
-    timing: function timing(timingCategory, timingVar, timingValue, options) {
-      if (!timingCategory || !timingVar || typeof timingValue === 'undefined') {
-        warn('timing: `timingCategory`, `timingVar`, and `timingValue` are required.');
-      } else if (typeof timingValue !== 'number') {
-        warn('event: expected `timingValue` to be a Number.');
-      } else {
-        _set.call(this, 'send', 'timing', timingCategory, timingVar, timingValue, options);
-      }
-
-      return this;
-    },
-
-    // https://developers.google.com/analytics/devguides/collection/analyticsjs/exceptions
-    exception: function exception(message, isFatal) {
-      _set.call(this, 'send', 'exception', {
-        exDescription: message,
-        exFatal: !!isFatal
-      });
-
-      return this;
-    },
-
-    // https://developers.google.com/analytics/devguides/collection/analyticsjs/custom-dims-mets
-    custom: function custom(key, value) {
-      if (!/(dimension|metric)[0-9]+/i.test(key)) {
-        warn('custom: key must match dimension[0-9]+ or metric[0-9]+');
-        return;
-      }
-
-      _set.call(this, 'set', key, value);
-
-      return this;
-    },
-
-    // https://developers.google.com/analytics/devguides/collection/analyticsjs/ecommerce
-
-    initializeEcommerce: function initializeEcommerce() {
-      this.plugin('ecommerce');
-    },
-    ecAddTransaction: function ecAddTransaction(transaction) {
-      if (!transaction || !transaction.id) {
-        warn('addTransaction: `transaction` is required and needs an `id`.');
-        return;
-      }
-
-      _set.call(this, 'ecommerce:addTransaction', transaction);
-
-      return this;
-    },
-    ecAddItem: function ecAddItem(productItem) {
-      if (!productItem || !productItem.id || !productItem.name) {
-        warn('addItem: `productItem` is required and needs an `id` and a `name`.');
-        return;
-      }
-
-      _set.call(this, 'ecommerce:addItem', productItem);
-
-      return this;
-    },
-    ecSend: function ecSend() {
-      _set.call(this, 'ecommerce:send');
-    },
-    ecClear: function ecClear() {
-      _set.call(this, 'ecommerce:clear');
-    }
-
-  };
-
-  var ua = new Analytics();
-  /* istanbul ignore next */
-  if (true) {
-    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = (function () {
-      return ua;
-    }).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-  } else if (typeof module === 'object' && typeof module.exports === 'object') {
-    module.exports = ua;
-  } else {
-    global.analytics = ua;
-  }
-})(this);
-
-/***/ }),
-
 /***/ "VidE":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2373,6 +2174,1855 @@ function Markdown(props, opts) {
     throw new Error('Invalid arguments. Markdown requires either a `<String>` or object: `{markdown: <String>}`');
   }
 }
+
+/***/ }),
+
+/***/ "Z70r":
+/***/ (function(module, exports, __webpack_require__) {
+
+(function webpackUniversalModuleDefinition(root, factory) {
+  if (true) module.exports = factory(__webpack_require__("eW0v"), __webpack_require__("5D9O"));else if (typeof define === 'function' && define.amd) define(["react", "prop-types"], factory);else {
+    var a = typeof exports === 'object' ? factory(require("react"), require("prop-types")) : factory(root["react"], root["prop-types"]);
+    for (var i in a) {
+      (typeof exports === 'object' ? exports : root)[i] = a[i];
+    }
+  }
+})(typeof self !== 'undefined' ? self : this, function (__WEBPACK_EXTERNAL_MODULE_11__, __WEBPACK_EXTERNAL_MODULE_12__) {
+  return (/******/function (modules) {
+      // webpackBootstrap
+      /******/ // The module cache
+      /******/var installedModules = {};
+      /******/
+      /******/ // The require function
+      /******/function __webpack_require__(moduleId) {
+        /******/
+        /******/ // Check if module is in cache
+        /******/if (installedModules[moduleId]) {
+          /******/return installedModules[moduleId].exports;
+          /******/
+        }
+        /******/ // Create a new module (and put it into the cache)
+        /******/var module = installedModules[moduleId] = {
+          /******/i: moduleId,
+          /******/l: false,
+          /******/exports: {}
+          /******/ };
+        /******/
+        /******/ // Execute the module function
+        /******/modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+        /******/
+        /******/ // Flag the module as loaded
+        /******/module.l = true;
+        /******/
+        /******/ // Return the exports of the module
+        /******/return module.exports;
+        /******/
+      }
+      /******/
+      /******/
+      /******/ // expose the modules object (__webpack_modules__)
+      /******/__webpack_require__.m = modules;
+      /******/
+      /******/ // expose the module cache
+      /******/__webpack_require__.c = installedModules;
+      /******/
+      /******/ // define getter function for harmony exports
+      /******/__webpack_require__.d = function (exports, name, getter) {
+        /******/if (!__webpack_require__.o(exports, name)) {
+          /******/Object.defineProperty(exports, name, {
+            /******/configurable: false,
+            /******/enumerable: true,
+            /******/get: getter
+            /******/ });
+          /******/
+        }
+        /******/
+      };
+      /******/
+      /******/ // getDefaultExport function for compatibility with non-harmony modules
+      /******/__webpack_require__.n = function (module) {
+        /******/var getter = module && module.__esModule ?
+        /******/function getDefault() {
+          return module['default'];
+        } :
+        /******/function getModuleExports() {
+          return module;
+        };
+        /******/__webpack_require__.d(getter, 'a', getter);
+        /******/return getter;
+        /******/
+      };
+      /******/
+      /******/ // Object.prototype.hasOwnProperty.call
+      /******/__webpack_require__.o = function (object, property) {
+        return Object.prototype.hasOwnProperty.call(object, property);
+      };
+      /******/
+      /******/ // __webpack_public_path__
+      /******/__webpack_require__.p = "";
+      /******/
+      /******/ // Load entry module and return exports
+      /******/return __webpack_require__(__webpack_require__.s = 2);
+      /******/
+    }(
+    /************************************************************************/
+    /******/[
+    /* 0 */
+    /***/function (module, exports, __webpack_require__) {
+
+      "use strict";
+
+      Object.defineProperty(exports, "__esModule", {
+        value: true
+      });
+      exports.default = warn;
+      function warn(s) {
+        console.warn('[react-ga]', s);
+      }
+
+      /***/
+    },
+    /* 1 */
+    /***/function (module, exports, __webpack_require__) {
+
+      "use strict";
+
+      Object.defineProperty(exports, "__esModule", {
+        value: true
+      });
+      exports.default = trim;
+      // GA strings need to have leading/trailing whitespace trimmed, and not all
+      // browsers have String.prototoype.trim().
+
+      function trim(s) {
+        return s.replace(/^\s+|\s+$/g, '');
+      }
+
+      /***/
+    },
+    /* 2 */
+    /***/function (module, exports, __webpack_require__) {
+
+      "use strict";
+
+      Object.defineProperty(exports, "__esModule", {
+        value: true
+      });
+      exports.testModeAPI = exports.OutboundLink = exports.plugin = undefined;
+
+      var _extends = Object.assign || function (target) {
+        for (var i = 1; i < arguments.length; i++) {
+          var source = arguments[i];for (var key in source) {
+            if (Object.prototype.hasOwnProperty.call(source, key)) {
+              target[key] = source[key];
+            }
+          }
+        }return target;
+      };
+
+      var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+        return typeof obj;
+      } : function (obj) {
+        return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+      };
+
+      exports.initialize = initialize;
+      exports.ga = ga;
+      exports.set = set;
+      exports.send = send;
+      exports.pageview = pageview;
+      exports.modalview = modalview;
+      exports.timing = timing;
+      exports.event = event;
+      exports.exception = exception;
+      exports.outboundLink = outboundLink;
+
+      var _format2 = __webpack_require__(3);
+
+      var _format3 = _interopRequireDefault(_format2);
+
+      var _removeLeadingSlash = __webpack_require__(6);
+
+      var _removeLeadingSlash2 = _interopRequireDefault(_removeLeadingSlash);
+
+      var _trim = __webpack_require__(1);
+
+      var _trim2 = _interopRequireDefault(_trim);
+
+      var _loadGA = __webpack_require__(7);
+
+      var _loadGA2 = _interopRequireDefault(_loadGA);
+
+      var _warn = __webpack_require__(0);
+
+      var _warn2 = _interopRequireDefault(_warn);
+
+      var _log = __webpack_require__(8);
+
+      var _log2 = _interopRequireDefault(_log);
+
+      var _testModeAPI = __webpack_require__(9);
+
+      var _testModeAPI2 = _interopRequireDefault(_testModeAPI);
+
+      var _OutboundLink = __webpack_require__(10);
+
+      var _OutboundLink2 = _interopRequireDefault(_OutboundLink);
+
+      function _interopRequireDefault(obj) {
+        return obj && obj.__esModule ? obj : { default: obj };
+      }
+
+      function _objectWithoutProperties(obj, keys) {
+        var target = {};for (var i in obj) {
+          if (keys.indexOf(i) >= 0) continue;if (!Object.prototype.hasOwnProperty.call(obj, i)) continue;target[i] = obj[i];
+        }return target;
+      }
+
+      function _toConsumableArray(arr) {
+        if (Array.isArray(arr)) {
+          for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
+            arr2[i] = arr[i];
+          }return arr2;
+        } else {
+          return Array.from(arr);
+        }
+      } /**
+         * React Google Analytics Module
+         *
+         * @package react-ga
+         * @author  Adam Lofting <adam@mozillafoundation.org>
+         *          Atul Varma <atul@mozillafoundation.org>
+         */
+
+      /**
+       * Utilities
+       */
+
+      var _debug = false;
+      var _titleCase = true;
+      var _testMode = false;
+      var _alwaysSendToDefaultTracker = true;
+
+      var internalGa = function internalGa() {
+        var _window;
+
+        if (_testMode) return _testModeAPI2.default.ga.apply(_testModeAPI2.default, arguments);
+        if (!window.ga) return (0, _warn2.default)('ReactGA.initialize must be called first or GoogleAnalytics should be loaded manually');
+        return (_window = window).ga.apply(_window, arguments);
+      };
+
+      function _format(s) {
+        return (0, _format3.default)(s, _titleCase);
+      }
+
+      function _gaCommand(trackerNames) {
+        for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+          args[_key - 1] = arguments[_key];
+        }
+
+        var command = args[0];
+        if (typeof internalGa === 'function') {
+          if (typeof command !== 'string') {
+            (0, _warn2.default)('ga command must be a string');
+            return;
+          }
+
+          if (_alwaysSendToDefaultTracker || !Array.isArray(trackerNames)) internalGa.apply(undefined, args);
+          if (Array.isArray(trackerNames)) {
+            trackerNames.forEach(function (name) {
+              internalGa.apply(undefined, _toConsumableArray([name + '.' + command].concat(args.slice(1))));
+            });
+          }
+        }
+      }
+
+      function _initialize(gaTrackingID, options) {
+        if (!gaTrackingID) {
+          (0, _warn2.default)('gaTrackingID is required in initialize()');
+          return;
+        }
+
+        if (options) {
+          if (options.debug && options.debug === true) {
+            _debug = true;
+          }
+
+          if (options.titleCase === false) {
+            _titleCase = false;
+          }
+        }
+
+        if (options && options.gaOptions) {
+          internalGa('create', gaTrackingID, options.gaOptions);
+        } else {
+          internalGa('create', gaTrackingID, 'auto');
+        }
+      }
+
+      function initialize(configsOrTrackingId, options) {
+        if (options && options.testMode === true) {
+          _testMode = true;
+        } else {
+          if (typeof window === 'undefined') {
+            return false;
+          }
+
+          (0, _loadGA2.default)(options);
+        }
+
+        _alwaysSendToDefaultTracker = options && typeof options.alwaysSendToDefaultTracker === 'boolean' ? options.alwaysSendToDefaultTracker : true;
+
+        if (Array.isArray(configsOrTrackingId)) {
+          configsOrTrackingId.forEach(function (config) {
+            if ((typeof config === 'undefined' ? 'undefined' : _typeof(config)) !== 'object') {
+              (0, _warn2.default)('All configs must be an object');
+              return;
+            }
+            _initialize(config.trackingId, config);
+          });
+        } else {
+          _initialize(configsOrTrackingId, options);
+        }
+        return true;
+      }
+
+      /**
+       * ga:
+       * Returns the original GA object.
+       */
+      function ga() {
+        for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+          args[_key2] = arguments[_key2];
+        }
+
+        if (args.length > 0) {
+          internalGa.apply(undefined, args);
+          if (_debug) {
+            (0, _log2.default)('called ga(\'arguments\');');
+            (0, _log2.default)('with arguments: ' + JSON.stringify(args));
+          }
+        }
+
+        return window.ga;
+      }
+
+      /**
+       * set:
+       * GA tracker set method
+       * @param {Object} fieldsObject - a field/value pair or a group of field/value pairs on the tracker
+       * @param {Array} trackerNames - (optional) a list of extra trackers to run the command on
+       */
+      function set(fieldsObject, trackerNames) {
+        if (!fieldsObject) {
+          (0, _warn2.default)('`fieldsObject` is required in .set()');
+          return;
+        }
+
+        if ((typeof fieldsObject === 'undefined' ? 'undefined' : _typeof(fieldsObject)) !== 'object') {
+          (0, _warn2.default)('Expected `fieldsObject` arg to be an Object');
+          return;
+        }
+
+        if (Object.keys(fieldsObject).length === 0) {
+          (0, _warn2.default)('empty `fieldsObject` given to .set()');
+        }
+
+        _gaCommand(trackerNames, 'set', fieldsObject);
+
+        if (_debug) {
+          (0, _log2.default)('called ga(\'set\', fieldsObject);');
+          (0, _log2.default)('with fieldsObject: ' + JSON.stringify(fieldsObject));
+        }
+      }
+
+      /**
+       * send:
+       * Clone of the low level `ga.send` method
+       * WARNING: No validations will be applied to this
+       * @param  {Object} fieldObject - field object for tracking different analytics
+       * @param  {Array} trackerNames - trackers to send the command to
+       * @param {Array} trackerNames - (optional) a list of extra trackers to run the command on
+       */
+      function send(fieldObject, trackerNames) {
+        _gaCommand(trackerNames, 'send', fieldObject);
+        if (_debug) {
+          (0, _log2.default)('called ga(\'send\', fieldObject);');
+          (0, _log2.default)('with fieldObject: ' + JSON.stringify(fieldObject));
+          (0, _log2.default)('with trackers: ' + JSON.stringify(trackerNames));
+        }
+      }
+
+      /**
+       * pageview:
+       * Basic GA pageview tracking
+       * @param  {String} path - the current page page e.g. '/about'
+       * @param {Array} trackerNames - (optional) a list of extra trackers to run the command on
+       * @param {String} title - (optional) the page title e. g. 'My Website'
+       */
+      function pageview(rawPath, trackerNames, title) {
+        if (!rawPath) {
+          (0, _warn2.default)('path is required in .pageview()');
+          return;
+        }
+
+        var path = (0, _trim2.default)(rawPath);
+        if (path === '') {
+          (0, _warn2.default)('path cannot be an empty string in .pageview()');
+          return;
+        }
+
+        var extraFields = {};
+        if (title) {
+          extraFields.title = title;
+        }
+
+        if (typeof ga === 'function') {
+          _gaCommand(trackerNames, 'send', _extends({
+            hitType: 'pageview',
+            page: path
+          }, extraFields));
+
+          if (_debug) {
+            (0, _log2.default)('called ga(\'send\', \'pageview\', path);');
+            var extraLog = '';
+            if (title) {
+              extraLog = ' and title: ' + title;
+            }
+            (0, _log2.default)('with path: ' + path + extraLog);
+          }
+        }
+      }
+
+      /**
+       * modalview:
+       * a proxy to basic GA pageview tracking to consistently track
+       * modal views that are an equivalent UX to a traditional pageview
+       * @param  {String} modalName e.g. 'add-or-edit-club'
+       * @param {Array} trackerNames - (optional) a list of extra trackers to run the command on
+       */
+      function modalview(rawModalName, trackerNames) {
+        if (!rawModalName) {
+          (0, _warn2.default)('modalName is required in .modalview(modalName)');
+          return;
+        }
+
+        var modalName = (0, _removeLeadingSlash2.default)((0, _trim2.default)(rawModalName));
+
+        if (modalName === '') {
+          (0, _warn2.default)('modalName cannot be an empty string or a single / in .modalview()');
+          return;
+        }
+
+        if (typeof ga === 'function') {
+          var path = '/modal/' + modalName;
+          _gaCommand(trackerNames, 'send', 'pageview', path);
+
+          if (_debug) {
+            (0, _log2.default)('called ga(\'send\', \'pageview\', path);');
+            (0, _log2.default)('with path: ' + path);
+          }
+        }
+      }
+
+      /**
+       * timing:
+       * GA timing
+       * @param args.category {String} required
+       * @param args.variable {String} required
+       * @param args.value  {Int}  required
+       * @param args.label  {String} required
+       * @param {Array} trackerNames - (optional) a list of extra trackers to run the command on
+       */
+      function timing() {
+        var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            category = _ref.category,
+            variable = _ref.variable,
+            value = _ref.value,
+            label = _ref.label;
+
+        var trackerNames = arguments[1];
+
+        if (typeof ga === 'function') {
+          if (!category || !variable || !value || typeof value !== 'number') {
+            (0, _warn2.default)('args.category, args.variable ' + 'AND args.value are required in timing() ' + 'AND args.value has to be a number');
+            return;
+          }
+
+          // Required Fields
+          var fieldObject = {
+            hitType: 'timing',
+            timingCategory: _format(category),
+            timingVar: _format(variable),
+            timingValue: value
+          };
+
+          if (label) {
+            fieldObject.timingLabel = _format(label);
+          }
+
+          send(fieldObject, trackerNames);
+        }
+      }
+
+      /**
+       * event:
+       * GA event tracking
+       * @param args.category {String} required
+       * @param args.action {String} required
+       * @param args.label {String} optional
+       * @param args.value {Int} optional
+       * @param args.nonInteraction {boolean} optional
+       * @param args.transport {string} optional
+       * @param {Array} trackerNames - (optional) a list of extra trackers to run the command on
+       */
+      function event() {
+        var _ref2 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+        var trackerNames = arguments[1];
+
+        var category = _ref2.category,
+            action = _ref2.action,
+            label = _ref2.label,
+            value = _ref2.value,
+            nonInteraction = _ref2.nonInteraction,
+            transport = _ref2.transport,
+            args = _objectWithoutProperties(_ref2, ['category', 'action', 'label', 'value', 'nonInteraction', 'transport']);
+
+        if (typeof ga === 'function') {
+          // Simple Validation
+          if (!category || !action) {
+            (0, _warn2.default)('args.category AND args.action are required in event()');
+            return;
+          }
+
+          // Required Fields
+          var fieldObject = {
+            hitType: 'event',
+            eventCategory: _format(category),
+            eventAction: _format(action)
+          };
+
+          // Optional Fields
+          if (label) {
+            fieldObject.eventLabel = _format(label);
+          }
+
+          if (typeof value !== 'undefined') {
+            if (typeof value !== 'number') {
+              (0, _warn2.default)('Expected `args.value` arg to be a Number.');
+            } else {
+              fieldObject.eventValue = value;
+            }
+          }
+
+          if (typeof nonInteraction !== 'undefined') {
+            if (typeof nonInteraction !== 'boolean') {
+              (0, _warn2.default)('`args.nonInteraction` must be a boolean.');
+            } else {
+              fieldObject.nonInteraction = nonInteraction;
+            }
+          }
+
+          if (typeof transport !== 'undefined') {
+            if (typeof transport !== 'string') {
+              (0, _warn2.default)('`args.transport` must be a string.');
+            } else {
+              if (['beacon', 'xhr', 'image'].indexOf(transport) === -1) {
+                (0, _warn2.default)('`args.transport` must be either one of these values: `beacon`, `xhr` or `image`');
+              }
+
+              fieldObject.transport = transport;
+            }
+          }
+
+          Object.keys(args).filter(function (key) {
+            return key.substr(0, 'dimension'.length) === 'dimension';
+          }).forEach(function (key) {
+            fieldObject[key] = args[key];
+          });
+
+          Object.keys(args).filter(function (key) {
+            return key.substr(0, 'metric'.length) === 'metric';
+          }).forEach(function (key) {
+            fieldObject[key] = args[key];
+          });
+
+          // Send to GA
+          send(fieldObject, trackerNames);
+        }
+      }
+
+      /**
+       * exception:
+       * GA exception tracking
+       * @param args.description {String} optional
+       * @param args.fatal {boolean} optional
+       * @param {Array} trackerNames - (optional) a list of extra trackers to run the command on
+       */
+      function exception(_ref3, trackerNames) {
+        var description = _ref3.description,
+            fatal = _ref3.fatal;
+
+        if (typeof ga === 'function') {
+          // Required Fields
+          var fieldObject = {
+            hitType: 'exception'
+          };
+
+          // Optional Fields
+          if (description) {
+            fieldObject.exDescription = _format(description);
+          }
+
+          if (typeof fatal !== 'undefined') {
+            if (typeof fatal !== 'boolean') {
+              (0, _warn2.default)('`args.fatal` must be a boolean.');
+            } else {
+              fieldObject.exFatal = fatal;
+            }
+          }
+
+          // Send to GA
+          send(fieldObject, trackerNames);
+        }
+      }
+
+      var plugin = exports.plugin = {
+        /**
+         * require:
+         * GA requires a plugin
+         * @param name {String} e.g. 'ecommerce' or 'myplugin'
+         * @param options {Object} optional e.g {path: '/log', debug: true}
+         */
+        require: function require(rawName, options) {
+          if (typeof ga === 'function') {
+            // Required Fields
+            if (!rawName) {
+              (0, _warn2.default)('`name` is required in .require()');
+              return;
+            }
+
+            var name = (0, _trim2.default)(rawName);
+            if (name === '') {
+              (0, _warn2.default)('`name` cannot be an empty string in .require()');
+              return;
+            }
+
+            // Optional Fields
+            if (options) {
+              if ((typeof options === 'undefined' ? 'undefined' : _typeof(options)) !== 'object') {
+                (0, _warn2.default)('Expected `options` arg to be an Object');
+                return;
+              }
+
+              if (Object.keys(options).length === 0) {
+                (0, _warn2.default)('Empty `options` given to .require()');
+              }
+
+              ga('require', name, options);
+
+              if (_debug) {
+                (0, _log2.default)('called ga(\'require\', \'' + name + '\', ' + JSON.stringify(options));
+              }
+            } else {
+              ga('require', name);
+
+              if (_debug) {
+                (0, _log2.default)('called ga(\'require\', \'' + name + '\');');
+              }
+            }
+          }
+        },
+
+        /**
+         * execute:
+         * GA execute action for plugin
+         * Takes variable number of arguments
+         * @param pluginName {String} e.g. 'ecommerce' or 'myplugin'
+         * @param action {String} e.g. 'addItem' or 'myCustomAction'
+         * @param actionType {String} optional e.g. 'detail'
+         * @param payload {Object} optional e.g { id: '1x5e', name : 'My product to track' }
+         */
+        execute: function execute(pluginName, action) {
+          var payload = void 0;
+          var actionType = void 0;
+
+          if ((arguments.length <= 2 ? 0 : arguments.length - 2) === 1) {
+            payload = arguments.length <= 2 ? undefined : arguments[2];
+          } else {
+            actionType = arguments.length <= 2 ? undefined : arguments[2];
+            payload = arguments.length <= 3 ? undefined : arguments[3];
+          }
+
+          if (typeof ga === 'function') {
+            if (typeof pluginName !== 'string') {
+              (0, _warn2.default)('Expected `pluginName` arg to be a String.');
+            } else if (typeof action !== 'string') {
+              (0, _warn2.default)('Expected `action` arg to be a String.');
+            } else {
+              var command = pluginName + ':' + action;
+              payload = payload || null;
+              if (actionType && payload) {
+                ga(command, actionType, payload);
+                if (_debug) {
+                  (0, _log2.default)('called ga(\'' + command + '\');');
+                  (0, _log2.default)('actionType: "' + actionType + '" with payload: ' + JSON.stringify(payload));
+                }
+              } else if (payload) {
+                ga(command, payload);
+                if (_debug) {
+                  (0, _log2.default)('called ga(\'' + command + '\');');
+                  (0, _log2.default)('with payload: ' + JSON.stringify(payload));
+                }
+              } else {
+                ga(command);
+                if (_debug) {
+                  (0, _log2.default)('called ga(\'' + command + '\');');
+                }
+              }
+            }
+          }
+        }
+      };
+
+      /**
+       * outboundLink:
+       * GA outboundLink tracking
+       * @param args.label {String} e.g. url, or 'Create an Account'
+       * @param {function} hitCallback - Called after processing a hit.
+       */
+      function outboundLink(args, hitCallback, trackerNames) {
+        if (typeof hitCallback !== 'function') {
+          (0, _warn2.default)('hitCallback function is required');
+          return;
+        }
+
+        if (typeof ga === 'function') {
+          // Simple Validation
+          if (!args || !args.label) {
+            (0, _warn2.default)('args.label is required in outboundLink()');
+            return;
+          }
+
+          // Required Fields
+          var fieldObject = {
+            hitType: 'event',
+            eventCategory: 'Outbound',
+            eventAction: 'Click',
+            eventLabel: _format(args.label)
+          };
+
+          var safetyCallbackCalled = false;
+          var safetyCallback = function safetyCallback() {
+            // This prevents a delayed response from GA
+            // causing hitCallback from being fired twice
+            safetyCallbackCalled = true;
+
+            hitCallback();
+          };
+
+          // Using a timeout to ensure the execution of critical application code
+          // in the case when the GA server might be down
+          // or an ad blocker prevents sending the data
+
+          // register safety net timeout:
+          var t = setTimeout(safetyCallback, 250);
+
+          var clearableCallbackForGA = function clearableCallbackForGA() {
+            clearTimeout(t);
+            if (!safetyCallbackCalled) {
+              hitCallback();
+            }
+          };
+
+          fieldObject.hitCallback = clearableCallbackForGA;
+
+          // Send to GA
+          send(fieldObject, trackerNames);
+        } else {
+          // if ga is not defined, return the callback so the application
+          // continues to work as expected
+          setTimeout(hitCallback, 0);
+        }
+      }
+
+      _OutboundLink2.default.origTrackLink = _OutboundLink2.default.trackLink;
+      _OutboundLink2.default.trackLink = outboundLink;
+      var OutboundLink = exports.OutboundLink = _OutboundLink2.default;
+      var testModeAPI = exports.testModeAPI = _testModeAPI2.default;
+
+      exports.default = {
+        initialize: initialize,
+        ga: ga,
+        set: set,
+        send: send,
+        pageview: pageview,
+        modalview: modalview,
+        timing: timing,
+        event: event,
+        exception: exception,
+        plugin: plugin,
+        outboundLink: outboundLink,
+        OutboundLink: OutboundLink,
+        testModeAPI: _testModeAPI2.default
+      };
+
+      /***/
+    },
+    /* 3 */
+    /***/function (module, exports, __webpack_require__) {
+
+      "use strict";
+
+      Object.defineProperty(exports, "__esModule", {
+        value: true
+      });
+      exports.default = format;
+
+      var _mightBeEmail = __webpack_require__(4);
+
+      var _mightBeEmail2 = _interopRequireDefault(_mightBeEmail);
+
+      var _toTitleCase = __webpack_require__(5);
+
+      var _toTitleCase2 = _interopRequireDefault(_toTitleCase);
+
+      var _warn = __webpack_require__(0);
+
+      var _warn2 = _interopRequireDefault(_warn);
+
+      function _interopRequireDefault(obj) {
+        return obj && obj.__esModule ? obj : { default: obj };
+      }
+
+      var redacted = 'REDACTED (Potential Email Address)';
+
+      function format(s, titleCase) {
+        if ((0, _mightBeEmail2.default)(s)) {
+          (0, _warn2.default)('This arg looks like an email address, redacting.');
+          return redacted;
+        }
+
+        if (titleCase) {
+          return (0, _toTitleCase2.default)(s);
+        }
+
+        return s;
+      }
+
+      /***/
+    },
+    /* 4 */
+    /***/function (module, exports, __webpack_require__) {
+
+      "use strict";
+
+      Object.defineProperty(exports, "__esModule", {
+        value: true
+      });
+      exports.default = mightBeEmail;
+      // See if s could be an email address. We don't want to send personal data like email.
+      // https://support.google.com/analytics/answer/2795983?hl=en
+      function mightBeEmail(s) {
+        // There's no point trying to validate rfc822 fully, just look for ...@...
+        return (/[^@]+@[^@]+/.test(s)
+        );
+      }
+
+      /***/
+    },
+    /* 5 */
+    /***/function (module, exports, __webpack_require__) {
+
+      "use strict";
+
+      Object.defineProperty(exports, "__esModule", {
+        value: true
+      });
+      exports.default = toTitleCase;
+
+      var _trim = __webpack_require__(1);
+
+      var _trim2 = _interopRequireDefault(_trim);
+
+      function _interopRequireDefault(obj) {
+        return obj && obj.__esModule ? obj : { default: obj };
+      }
+
+      var smallWords = /^(a|an|and|as|at|but|by|en|for|if|in|nor|of|on|or|per|the|to|vs?\.?|via)$/i; /**
+                                                                                                      * To Title Case 2.1 - http://individed.com/code/to-title-case/
+                                                                                                      * Copyright 2008-2013 David Gouch. Licensed under the MIT License.
+                                                                                                      * https://github.com/gouch/to-title-case
+                                                                                                      */
+
+      function toTitleCase(string) {
+        return (0, _trim2.default)(string).replace(/[A-Za-z0-9\u00C0-\u00FF]+[^\s-]*/g, function (match, index, title) {
+          if (index > 0 && index + match.length !== title.length && match.search(smallWords) > -1 && title.charAt(index - 2) !== ':' && (title.charAt(index + match.length) !== '-' || title.charAt(index - 1) === '-') && title.charAt(index - 1).search(/[^\s-]/) < 0) {
+            return match.toLowerCase();
+          }
+
+          if (match.substr(1).search(/[A-Z]|\../) > -1) {
+            return match;
+          }
+
+          return match.charAt(0).toUpperCase() + match.substr(1);
+        });
+      }
+
+      /***/
+    },
+    /* 6 */
+    /***/function (module, exports, __webpack_require__) {
+
+      "use strict";
+
+      Object.defineProperty(exports, "__esModule", {
+        value: true
+      });
+      exports.default = removeLeadingSlash;
+      function removeLeadingSlash(string) {
+        if (string.substring(0, 1) === '/') {
+          return string.substring(1);
+        }
+
+        return string;
+      }
+
+      /***/
+    },
+    /* 7 */
+    /***/function (module, exports, __webpack_require__) {
+
+      "use strict";
+
+      Object.defineProperty(exports, "__esModule", {
+        value: true
+      });
+
+      exports.default = function (options) {
+        // https://developers.google.com/analytics/devguides/collection/analyticsjs/
+        /* eslint-disable */
+        (function (i, s, o, g, r, a, m) {
+          i['GoogleAnalyticsObject'] = r;
+          i[r] = i[r] || function () {
+            (i[r].q = i[r].q || []).push(arguments);
+          }, i[r].l = 1 * new Date();
+          a = s.createElement(o), m = s.getElementsByTagName(o)[0];
+          a.async = 1;
+          a.src = g;
+          m.parentNode.insertBefore(a, m);
+        })(window, document, 'script', options && options.gaAddress ? options.gaAddress : 'https://www.google-analytics.com/analytics.js', 'ga');
+        /* eslint-enable */
+      };
+
+      /***/
+    },
+    /* 8 */
+    /***/function (module, exports, __webpack_require__) {
+
+      "use strict";
+
+      Object.defineProperty(exports, "__esModule", {
+        value: true
+      });
+      exports.default = log;
+      function log(s) {
+        console.info('[react-ga]', s);
+      }
+
+      /***/
+    },
+    /* 9 */
+    /***/function (module, exports, __webpack_require__) {
+
+      "use strict";
+
+      Object.defineProperty(exports, "__esModule", {
+        value: true
+      });
+      var gaCalls = exports.gaCalls = [];
+
+      exports.default = {
+        calls: gaCalls,
+        ga: function ga() {
+          for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
+          }
+
+          gaCalls.push([].concat(args));
+        }
+      };
+
+      /***/
+    },
+    /* 10 */
+    /***/function (module, exports, __webpack_require__) {
+
+      "use strict";
+
+      Object.defineProperty(exports, "__esModule", {
+        value: true
+      });
+
+      var _extends = Object.assign || function (target) {
+        for (var i = 1; i < arguments.length; i++) {
+          var source = arguments[i];for (var key in source) {
+            if (Object.prototype.hasOwnProperty.call(source, key)) {
+              target[key] = source[key];
+            }
+          }
+        }return target;
+      };
+
+      var _createClass = function () {
+        function defineProperties(target, props) {
+          for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+          }
+        }return function (Constructor, protoProps, staticProps) {
+          if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+        };
+      }();
+
+      var _react = __webpack_require__(11);
+
+      var _react2 = _interopRequireDefault(_react);
+
+      var _propTypes = __webpack_require__(12);
+
+      var _propTypes2 = _interopRequireDefault(_propTypes);
+
+      var _warn = __webpack_require__(0);
+
+      var _warn2 = _interopRequireDefault(_warn);
+
+      function _interopRequireDefault(obj) {
+        return obj && obj.__esModule ? obj : { default: obj };
+      }
+
+      function _classCallCheck(instance, Constructor) {
+        if (!(instance instanceof Constructor)) {
+          throw new TypeError("Cannot call a class as a function");
+        }
+      }
+
+      function _possibleConstructorReturn(self, call) {
+        if (!self) {
+          throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+        }return call && (typeof call === "object" || typeof call === "function") ? call : self;
+      }
+
+      function _inherits(subClass, superClass) {
+        if (typeof superClass !== "function" && superClass !== null) {
+          throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+        }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+      }
+
+      var NEWTAB = '_blank';
+      var MIDDLECLICK = 1;
+
+      var OutboundLink = function (_Component) {
+        _inherits(OutboundLink, _Component);
+
+        function OutboundLink() {
+          var _ref;
+
+          var _temp, _this, _ret;
+
+          _classCallCheck(this, OutboundLink);
+
+          for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
+          }
+
+          return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = OutboundLink.__proto__ || Object.getPrototypeOf(OutboundLink)).call.apply(_ref, [this].concat(args))), _this), _this.handleClick = function (event) {
+            var _this$props = _this.props,
+                target = _this$props.target,
+                eventLabel = _this$props.eventLabel,
+                to = _this$props.to,
+                onClick = _this$props.onClick;
+
+            var eventMeta = { label: eventLabel };
+            var sameTarget = target !== NEWTAB;
+            var normalClick = !(event.ctrlKey || event.shiftKey || event.metaKey || event.button === MIDDLECLICK);
+
+            if (sameTarget && normalClick) {
+              event.preventDefault();
+              OutboundLink.trackLink(eventMeta, function () {
+                window.location.href = to;
+              });
+            } else {
+              OutboundLink.trackLink(eventMeta, function () {});
+            }
+
+            if (onClick) {
+              onClick(event);
+            }
+          }, _temp), _possibleConstructorReturn(_this, _ret);
+        }
+
+        _createClass(OutboundLink, [{
+          key: 'render',
+          value: function render() {
+            var props = _extends({}, this.props, {
+              href: this.props.to,
+              onClick: this.handleClick
+            });
+            delete props.eventLabel;
+            return _react2.default.createElement('a', props);
+          }
+        }]);
+
+        return OutboundLink;
+      }(_react.Component);
+
+      OutboundLink.propTypes = {
+        eventLabel: _propTypes2.default.string.isRequired,
+        target: _propTypes2.default.string,
+        to: _propTypes2.default.string,
+        onClick: _propTypes2.default.func
+      };
+      OutboundLink.defaultProps = {
+        target: null,
+        to: null,
+        onClick: null
+      };
+
+      OutboundLink.trackLink = function () {
+        (0, _warn2.default)('ga tracking not enabled');
+      };
+
+      exports.default = OutboundLink;
+
+      /***/
+    },
+    /* 11 */
+    /***/function (module, exports) {
+
+      module.exports = __WEBPACK_EXTERNAL_MODULE_11__;
+
+      /***/
+    },
+    /* 12 */
+    /***/function (module, exports) {
+
+      module.exports = __WEBPACK_EXTERNAL_MODULE_12__;
+
+      /***/
+    }]
+    /******/)
+  );
+});
+
+/***/ }),
+
+/***/ "eW0v":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "version", function() { return version; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DOM", function() { return DOM; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Children", function() { return Children; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render$1; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createClass", function() { return createClass; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createPortal", function() { return createPortal; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createFactory", function() { return createFactory; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createElement", function() { return createElement; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "cloneElement", function() { return cloneElement$1; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isValidElement", function() { return isValidElement; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "findDOMNode", function() { return findDOMNode; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "unmountComponentAtNode", function() { return unmountComponentAtNode; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Component", function() { return Component$1; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PureComponent", function() { return PureComponent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "unstable_renderSubtreeIntoContainer", function() { return renderSubtreeIntoContainer; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "unstable_batchedUpdates", function() { return unstable_batchedUpdates; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__spread", function() { return extend; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_prop_types__ = __webpack_require__("5D9O");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_prop_types__);
+/* harmony reexport (default from non-hamory) */ __webpack_require__.d(__webpack_exports__, "PropTypes", function() { return __WEBPACK_IMPORTED_MODULE_0_prop_types___default.a; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_preact__ = __webpack_require__("KM04");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_preact___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_preact__);
+
+
+
+
+var version = '15.1.0'; // trick libraries to think we are react
+
+var ELEMENTS = 'a abbr address area article aside audio b base bdi bdo big blockquote body br button canvas caption cite code col colgroup data datalist dd del details dfn dialog div dl dt em embed fieldset figcaption figure footer form h1 h2 h3 h4 h5 h6 head header hgroup hr html i iframe img input ins kbd keygen label legend li link main map mark menu menuitem meta meter nav noscript object ol optgroup option output p param picture pre progress q rp rt ruby s samp script section select small source span strong style sub summary sup table tbody td textarea tfoot th thead time title tr track u ul var video wbr circle clipPath defs ellipse g image line linearGradient mask path pattern polygon polyline radialGradient rect stop svg text tspan'.split(' ');
+
+var REACT_ELEMENT_TYPE = typeof Symbol !== 'undefined' && Symbol.for && Symbol.for('react.element') || 0xeac7;
+
+var COMPONENT_WRAPPER_KEY = typeof Symbol !== 'undefined' && Symbol.for ? Symbol.for('__preactCompatWrapper') : '__preactCompatWrapper';
+
+// don't autobind these methods since they already have guaranteed context.
+var AUTOBIND_BLACKLIST = {
+	constructor: 1,
+	render: 1,
+	shouldComponentUpdate: 1,
+	componentWillReceiveProps: 1,
+	componentWillUpdate: 1,
+	componentDidUpdate: 1,
+	componentWillMount: 1,
+	componentDidMount: 1,
+	componentWillUnmount: 1,
+	componentDidUnmount: 1
+};
+
+var CAMEL_PROPS = /^(?:accent|alignment|arabic|baseline|cap|clip|color|fill|flood|font|glyph|horiz|marker|overline|paint|stop|strikethrough|stroke|text|underline|unicode|units|v|vector|vert|word|writing|x)[A-Z]/;
+
+var BYPASS_HOOK = {};
+
+/*global process*/
+var DEV = typeof process !== 'undefined' && process.env && "production" !== 'production';
+
+// a component that renders nothing. Used to replace components for unmountComponentAtNode.
+function EmptyComponent() {
+	return null;
+}
+
+// make react think we're react.
+var VNode = Object(__WEBPACK_IMPORTED_MODULE_1_preact__["h"])('a', null).constructor;
+VNode.prototype.$$typeof = REACT_ELEMENT_TYPE;
+VNode.prototype.preactCompatUpgraded = false;
+VNode.prototype.preactCompatNormalized = false;
+
+Object.defineProperty(VNode.prototype, 'type', {
+	get: function get() {
+		return this.nodeName;
+	},
+	set: function set(v) {
+		this.nodeName = v;
+	},
+	configurable: true
+});
+
+Object.defineProperty(VNode.prototype, 'props', {
+	get: function get() {
+		return this.attributes;
+	},
+	set: function set(v) {
+		this.attributes = v;
+	},
+	configurable: true
+});
+
+var oldEventHook = __WEBPACK_IMPORTED_MODULE_1_preact__["options"].event;
+__WEBPACK_IMPORTED_MODULE_1_preact__["options"].event = function (e) {
+	if (oldEventHook) {
+		e = oldEventHook(e);
+	}
+	e.persist = Object;
+	e.nativeEvent = e;
+	return e;
+};
+
+var oldVnodeHook = __WEBPACK_IMPORTED_MODULE_1_preact__["options"].vnode;
+__WEBPACK_IMPORTED_MODULE_1_preact__["options"].vnode = function (vnode) {
+	if (!vnode.preactCompatUpgraded) {
+		vnode.preactCompatUpgraded = true;
+
+		var tag = vnode.nodeName,
+		    attrs = vnode.attributes = vnode.attributes == null ? {} : extend({}, vnode.attributes);
+
+		if (typeof tag === 'function') {
+			if (tag[COMPONENT_WRAPPER_KEY] === true || tag.prototype && 'isReactComponent' in tag.prototype) {
+				if (vnode.children && String(vnode.children) === '') {
+					vnode.children = undefined;
+				}
+				if (vnode.children) {
+					attrs.children = vnode.children;
+				}
+
+				if (!vnode.preactCompatNormalized) {
+					normalizeVNode(vnode);
+				}
+				handleComponentVNode(vnode);
+			}
+		} else {
+			if (vnode.children && String(vnode.children) === '') {
+				vnode.children = undefined;
+			}
+			if (vnode.children) {
+				attrs.children = vnode.children;
+			}
+
+			if (attrs.defaultValue) {
+				if (!attrs.value && attrs.value !== 0) {
+					attrs.value = attrs.defaultValue;
+				}
+				delete attrs.defaultValue;
+			}
+
+			handleElementVNode(vnode, attrs);
+		}
+	}
+
+	if (oldVnodeHook) {
+		oldVnodeHook(vnode);
+	}
+};
+
+function handleComponentVNode(vnode) {
+	var tag = vnode.nodeName,
+	    a = vnode.attributes;
+
+	vnode.attributes = {};
+	if (tag.defaultProps) {
+		extend(vnode.attributes, tag.defaultProps);
+	}
+	if (a) {
+		extend(vnode.attributes, a);
+	}
+}
+
+function handleElementVNode(vnode, a) {
+	var shouldSanitize, attrs, i;
+	if (a) {
+		for (i in a) {
+			if (shouldSanitize = CAMEL_PROPS.test(i)) {
+				break;
+			}
+		}
+		if (shouldSanitize) {
+			attrs = vnode.attributes = {};
+			for (i in a) {
+				if (a.hasOwnProperty(i)) {
+					attrs[CAMEL_PROPS.test(i) ? i.replace(/([A-Z0-9])/, '-$1').toLowerCase() : i] = a[i];
+				}
+			}
+		}
+	}
+}
+
+// proxy render() since React returns a Component reference.
+function render$1(vnode, parent, callback) {
+	var prev = parent && parent._preactCompatRendered && parent._preactCompatRendered.base;
+
+	// ignore impossible previous renders
+	if (prev && prev.parentNode !== parent) {
+		prev = null;
+	}
+
+	// default to first Element child
+	if (!prev && parent) {
+		prev = parent.firstElementChild;
+	}
+
+	// remove unaffected siblings
+	for (var i = parent.childNodes.length; i--;) {
+		if (parent.childNodes[i] !== prev) {
+			parent.removeChild(parent.childNodes[i]);
+		}
+	}
+
+	var out = Object(__WEBPACK_IMPORTED_MODULE_1_preact__["render"])(vnode, parent, prev);
+	if (parent) {
+		parent._preactCompatRendered = out && (out._component || { base: out });
+	}
+	if (typeof callback === 'function') {
+		callback();
+	}
+	return out && out._component || out;
+}
+
+var ContextProvider = function ContextProvider() {};
+
+ContextProvider.prototype.getChildContext = function () {
+	return this.props.context;
+};
+ContextProvider.prototype.render = function (props) {
+	return props.children[0];
+};
+
+function renderSubtreeIntoContainer(parentComponent, vnode, container, callback) {
+	var wrap = Object(__WEBPACK_IMPORTED_MODULE_1_preact__["h"])(ContextProvider, { context: parentComponent.context }, vnode);
+	var renderContainer = render$1(wrap, container);
+	var component = renderContainer._component || renderContainer.base;
+	if (callback) {
+		callback.call(component, renderContainer);
+	}
+	return component;
+}
+
+function Portal(props) {
+	renderSubtreeIntoContainer(this, props.vnode, props.container);
+}
+
+function createPortal(vnode, container) {
+	return Object(__WEBPACK_IMPORTED_MODULE_1_preact__["h"])(Portal, { vnode: vnode, container: container });
+}
+
+function unmountComponentAtNode(container) {
+	var existing = container._preactCompatRendered && container._preactCompatRendered.base;
+	if (existing && existing.parentNode === container) {
+		Object(__WEBPACK_IMPORTED_MODULE_1_preact__["render"])(Object(__WEBPACK_IMPORTED_MODULE_1_preact__["h"])(EmptyComponent), container, existing);
+		return true;
+	}
+	return false;
+}
+
+var ARR = [];
+
+// This API is completely unnecessary for Preact, so it's basically passthrough.
+var Children = {
+	map: function map(children, fn, ctx) {
+		if (children == null) {
+			return null;
+		}
+		children = Children.toArray(children);
+		if (ctx && ctx !== children) {
+			fn = fn.bind(ctx);
+		}
+		return children.map(fn);
+	},
+	forEach: function forEach(children, fn, ctx) {
+		if (children == null) {
+			return null;
+		}
+		children = Children.toArray(children);
+		if (ctx && ctx !== children) {
+			fn = fn.bind(ctx);
+		}
+		children.forEach(fn);
+	},
+	count: function count(children) {
+		return children && children.length || 0;
+	},
+	only: function only(children) {
+		children = Children.toArray(children);
+		if (children.length !== 1) {
+			throw new Error('Children.only() expects only one child.');
+		}
+		return children[0];
+	},
+	toArray: function toArray(children) {
+		if (children == null) {
+			return [];
+		}
+		return ARR.concat(children);
+	}
+};
+
+/** Track current render() component for ref assignment */
+var currentComponent;
+
+function createFactory(type) {
+	return createElement.bind(null, type);
+}
+
+var DOM = {};
+for (var i = ELEMENTS.length; i--;) {
+	DOM[ELEMENTS[i]] = createFactory(ELEMENTS[i]);
+}
+
+function upgradeToVNodes(arr, offset) {
+	for (var i = offset || 0; i < arr.length; i++) {
+		var obj = arr[i];
+		if (Array.isArray(obj)) {
+			upgradeToVNodes(obj);
+		} else if (obj && typeof obj === 'object' && !isValidElement(obj) && (obj.props && obj.type || obj.attributes && obj.nodeName || obj.children)) {
+			arr[i] = createElement(obj.type || obj.nodeName, obj.props || obj.attributes, obj.children);
+		}
+	}
+}
+
+function isStatelessComponent(c) {
+	return typeof c === 'function' && !(c.prototype && c.prototype.render);
+}
+
+// wraps stateless functional components in a PropTypes validator
+function wrapStatelessComponent(WrappedComponent) {
+	return createClass({
+		displayName: WrappedComponent.displayName || WrappedComponent.name,
+		render: function render() {
+			return WrappedComponent(this.props, this.context);
+		}
+	});
+}
+
+function statelessComponentHook(Ctor) {
+	var Wrapped = Ctor[COMPONENT_WRAPPER_KEY];
+	if (Wrapped) {
+		return Wrapped === true ? Ctor : Wrapped;
+	}
+
+	Wrapped = wrapStatelessComponent(Ctor);
+
+	Object.defineProperty(Wrapped, COMPONENT_WRAPPER_KEY, { configurable: true, value: true });
+	Wrapped.displayName = Ctor.displayName;
+	Wrapped.propTypes = Ctor.propTypes;
+	Wrapped.defaultProps = Ctor.defaultProps;
+
+	Object.defineProperty(Ctor, COMPONENT_WRAPPER_KEY, { configurable: true, value: Wrapped });
+
+	return Wrapped;
+}
+
+function createElement() {
+	var args = [],
+	    len = arguments.length;
+	while (len--) {
+		args[len] = arguments[len];
+	}upgradeToVNodes(args, 2);
+	return normalizeVNode(__WEBPACK_IMPORTED_MODULE_1_preact__["h"].apply(void 0, args));
+}
+
+function normalizeVNode(vnode) {
+	vnode.preactCompatNormalized = true;
+
+	applyClassName(vnode);
+
+	if (isStatelessComponent(vnode.nodeName)) {
+		vnode.nodeName = statelessComponentHook(vnode.nodeName);
+	}
+
+	var ref = vnode.attributes.ref,
+	    type = ref && typeof ref;
+	if (currentComponent && (type === 'string' || type === 'number')) {
+		vnode.attributes.ref = createStringRefProxy(ref, currentComponent);
+	}
+
+	applyEventNormalization(vnode);
+
+	return vnode;
+}
+
+function cloneElement$1(element, props) {
+	var children = [],
+	    len = arguments.length - 2;
+	while (len-- > 0) {
+		children[len] = arguments[len + 2];
+	}if (!isValidElement(element)) {
+		return element;
+	}
+	var elementProps = element.attributes || element.props;
+	var node = Object(__WEBPACK_IMPORTED_MODULE_1_preact__["h"])(element.nodeName || element.type, extend({}, elementProps), element.children || elementProps && elementProps.children);
+	// Only provide the 3rd argument if needed.
+	// Arguments 3+ overwrite element.children in preactCloneElement
+	var cloneArgs = [node, props];
+	if (children && children.length) {
+		cloneArgs.push(children);
+	} else if (props && props.children) {
+		cloneArgs.push(props.children);
+	}
+	return normalizeVNode(__WEBPACK_IMPORTED_MODULE_1_preact__["cloneElement"].apply(void 0, cloneArgs));
+}
+
+function isValidElement(element) {
+	return element && (element instanceof VNode || element.$$typeof === REACT_ELEMENT_TYPE);
+}
+
+function createStringRefProxy(name, component) {
+	return component._refProxies[name] || (component._refProxies[name] = function (resolved) {
+		if (component && component.refs) {
+			component.refs[name] = resolved;
+			if (resolved === null) {
+				delete component._refProxies[name];
+				component = null;
+			}
+		}
+	});
+}
+
+function applyEventNormalization(ref) {
+	var nodeName = ref.nodeName;
+	var attributes = ref.attributes;
+
+	if (!attributes || typeof nodeName !== 'string') {
+		return;
+	}
+	var props = {};
+	for (var i in attributes) {
+		props[i.toLowerCase()] = i;
+	}
+	if (props.ondoubleclick) {
+		attributes.ondblclick = attributes[props.ondoubleclick];
+		delete attributes[props.ondoubleclick];
+	}
+	// for *textual inputs* (incl textarea), normalize `onChange` -> `onInput`:
+	if (props.onchange && (nodeName === 'textarea' || nodeName.toLowerCase() === 'input' && !/^fil|che|rad/i.test(attributes.type))) {
+		var normalized = props.oninput || 'oninput';
+		if (!attributes[normalized]) {
+			attributes[normalized] = multihook([attributes[normalized], attributes[props.onchange]]);
+			delete attributes[props.onchange];
+		}
+	}
+}
+
+function applyClassName(vnode) {
+	var a = vnode.attributes || (vnode.attributes = {});
+	classNameDescriptor.enumerable = 'className' in a;
+	if (a.className) {
+		a.class = a.className;
+	}
+	Object.defineProperty(a, 'className', classNameDescriptor);
+}
+
+var classNameDescriptor = {
+	configurable: true,
+	get: function get() {
+		return this.class;
+	},
+	set: function set(v) {
+		this.class = v;
+	}
+};
+
+function extend(base, props) {
+	var arguments$1 = arguments;
+
+	for (var i = 1, obj = void 0; i < arguments.length; i++) {
+		if (obj = arguments$1[i]) {
+			for (var key in obj) {
+				if (obj.hasOwnProperty(key)) {
+					base[key] = obj[key];
+				}
+			}
+		}
+	}
+	return base;
+}
+
+function shallowDiffers(a, b) {
+	for (var i in a) {
+		if (!(i in b)) {
+			return true;
+		}
+	}
+	for (var i$1 in b) {
+		if (a[i$1] !== b[i$1]) {
+			return true;
+		}
+	}
+	return false;
+}
+
+function findDOMNode(component) {
+	return component && component.base || null;
+}
+
+function F() {}
+
+function createClass(obj) {
+	function cl(props, context) {
+		bindAll(this);
+		Component$1.call(this, props, context, BYPASS_HOOK);
+		newComponentHook.call(this, props, context);
+	}
+
+	obj = extend({ constructor: cl }, obj);
+
+	// We need to apply mixins here so that getDefaultProps is correctly mixed
+	if (obj.mixins) {
+		applyMixins(obj, collateMixins(obj.mixins));
+	}
+	if (obj.statics) {
+		extend(cl, obj.statics);
+	}
+	if (obj.propTypes) {
+		cl.propTypes = obj.propTypes;
+	}
+	if (obj.defaultProps) {
+		cl.defaultProps = obj.defaultProps;
+	}
+	if (obj.getDefaultProps) {
+		cl.defaultProps = obj.getDefaultProps.call(cl);
+	}
+
+	F.prototype = Component$1.prototype;
+	cl.prototype = extend(new F(), obj);
+
+	cl.displayName = obj.displayName || 'Component';
+
+	return cl;
+}
+
+// Flatten an Array of mixins to a map of method name to mixin implementations
+function collateMixins(mixins) {
+	var keyed = {};
+	for (var i = 0; i < mixins.length; i++) {
+		var mixin = mixins[i];
+		for (var key in mixin) {
+			if (mixin.hasOwnProperty(key) && typeof mixin[key] === 'function') {
+				(keyed[key] || (keyed[key] = [])).push(mixin[key]);
+			}
+		}
+	}
+	return keyed;
+}
+
+// apply a mapping of Arrays of mixin methods to a component prototype
+function applyMixins(proto, mixins) {
+	for (var key in mixins) {
+		if (mixins.hasOwnProperty(key)) {
+			proto[key] = multihook(mixins[key].concat(proto[key] || ARR), key === 'getDefaultProps' || key === 'getInitialState' || key === 'getChildContext');
+		}
+	}
+}
+
+function bindAll(ctx) {
+	for (var i in ctx) {
+		var v = ctx[i];
+		if (typeof v === 'function' && !v.__bound && !AUTOBIND_BLACKLIST.hasOwnProperty(i)) {
+			(ctx[i] = v.bind(ctx)).__bound = true;
+		}
+	}
+}
+
+function callMethod(ctx, m, args) {
+	if (typeof m === 'string') {
+		m = ctx.constructor.prototype[m];
+	}
+	if (typeof m === 'function') {
+		return m.apply(ctx, args);
+	}
+}
+
+function multihook(hooks, skipDuplicates) {
+	return function () {
+		var arguments$1 = arguments;
+		var this$1 = this;
+
+		var ret;
+		for (var i = 0; i < hooks.length; i++) {
+			var r = callMethod(this$1, hooks[i], arguments$1);
+
+			if (skipDuplicates && r != null) {
+				if (!ret) {
+					ret = {};
+				}
+				for (var key in r) {
+					if (r.hasOwnProperty(key)) {
+						ret[key] = r[key];
+					}
+				}
+			} else if (typeof r !== 'undefined') {
+				ret = r;
+			}
+		}
+		return ret;
+	};
+}
+
+function newComponentHook(props, context) {
+	propsHook.call(this, props, context);
+	this.componentWillReceiveProps = multihook([propsHook, this.componentWillReceiveProps || 'componentWillReceiveProps']);
+	this.render = multihook([propsHook, beforeRender, this.render || 'render', afterRender]);
+}
+
+function propsHook(props, context) {
+	if (!props) {
+		return;
+	}
+
+	// React annoyingly special-cases single children, and some react components are ridiculously strict about this.
+	var c = props.children;
+	if (c && Array.isArray(c) && c.length === 1 && (typeof c[0] === 'string' || typeof c[0] === 'function' || c[0] instanceof VNode)) {
+		props.children = c[0];
+
+		// but its totally still going to be an Array.
+		if (props.children && typeof props.children === 'object') {
+			props.children.length = 1;
+			props.children[0] = props.children;
+		}
+	}
+
+	// add proptype checking
+	if (DEV) {
+		var ctor = typeof this === 'function' ? this : this.constructor,
+		    propTypes = this.propTypes || ctor.propTypes;
+		var displayName = this.displayName || ctor.name;
+
+		if (propTypes) {
+			__WEBPACK_IMPORTED_MODULE_0_prop_types___default.a.checkPropTypes(propTypes, props, 'prop', displayName);
+		}
+	}
+}
+
+function beforeRender(props) {
+	currentComponent = this;
+}
+
+function afterRender() {
+	if (currentComponent === this) {
+		currentComponent = null;
+	}
+}
+
+function Component$1(props, context, opts) {
+	__WEBPACK_IMPORTED_MODULE_1_preact__["Component"].call(this, props, context);
+	this.state = this.getInitialState ? this.getInitialState() : {};
+	this.refs = {};
+	this._refProxies = {};
+	if (opts !== BYPASS_HOOK) {
+		newComponentHook.call(this, props, context);
+	}
+}
+extend(Component$1.prototype = new __WEBPACK_IMPORTED_MODULE_1_preact__["Component"](), {
+	constructor: Component$1,
+
+	isReactComponent: {},
+
+	replaceState: function replaceState(state, callback) {
+		var this$1 = this;
+
+		this.setState(state, callback);
+		for (var i in this$1.state) {
+			if (!(i in state)) {
+				delete this$1.state[i];
+			}
+		}
+	},
+
+	getDOMNode: function getDOMNode() {
+		return this.base;
+	},
+
+	isMounted: function isMounted() {
+		return !!this.base;
+	}
+});
+
+function PureComponent(props, context) {
+	Component$1.call(this, props, context);
+}
+F.prototype = Component$1.prototype;
+PureComponent.prototype = new F();
+PureComponent.prototype.isPureReactComponent = true;
+PureComponent.prototype.shouldComponentUpdate = function (props, state) {
+	return shallowDiffers(this.props, props) || shallowDiffers(this.state, state);
+};
+
+function unstable_batchedUpdates(callback) {
+	callback();
+}
+
+var index = {
+	version: version,
+	DOM: DOM,
+	PropTypes: __WEBPACK_IMPORTED_MODULE_0_prop_types___default.a,
+	Children: Children,
+	render: render$1,
+	createClass: createClass,
+	createPortal: createPortal,
+	createFactory: createFactory,
+	createElement: createElement,
+	cloneElement: cloneElement$1,
+	isValidElement: isValidElement,
+	findDOMNode: findDOMNode,
+	unmountComponentAtNode: unmountComponentAtNode,
+	Component: Component$1,
+	PureComponent: PureComponent,
+	unstable_renderSubtreeIntoContainer: renderSubtreeIntoContainer,
+	unstable_batchedUpdates: unstable_batchedUpdates,
+	__spread: extend
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (index);
+
+//# sourceMappingURL=preact-compat.es.js.map
 
 /***/ }),
 
@@ -2671,6 +4321,68 @@ function Markdown(props, opts) {
   return Markup;
 });
 //# sourceMappingURL=preact-markup.js.map
+
+/***/ }),
+
+/***/ "wVGV":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+
+
+var ReactPropTypesSecret = __webpack_require__("Asjh");
+
+function emptyFunction() {}
+
+module.exports = function () {
+  function shim(props, propName, componentName, location, propFullName, secret) {
+    if (secret === ReactPropTypesSecret) {
+      // It is still safe when called from React.
+      return;
+    }
+    var err = new Error('Calling PropTypes validators directly is not supported by the `prop-types` package. ' + 'Use PropTypes.checkPropTypes() to call them. ' + 'Read more at http://fb.me/use-check-prop-types');
+    err.name = 'Invariant Violation';
+    throw err;
+  };
+  shim.isRequired = shim;
+  function getShim() {
+    return shim;
+  };
+  // Important!
+  // Keep this list in sync with production version in `./factoryWithTypeCheckers.js`.
+  var ReactPropTypes = {
+    array: shim,
+    bool: shim,
+    func: shim,
+    number: shim,
+    object: shim,
+    string: shim,
+    symbol: shim,
+
+    any: shim,
+    arrayOf: getShim,
+    element: shim,
+    instanceOf: getShim,
+    node: shim,
+    objectOf: getShim,
+    oneOf: getShim,
+    oneOfType: getShim,
+    shape: getShim,
+    exact: getShim
+  };
+
+  ReactPropTypes.checkPropTypes = emptyFunction;
+  ReactPropTypes.PropTypes = ReactPropTypes;
+
+  return ReactPropTypes;
+};
 
 /***/ })
 
