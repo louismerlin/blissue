@@ -1729,8 +1729,9 @@ preact_router_es_Router.Link = preact_router_es_Link;
 //# sourceMappingURL=preact-router.es.js.map
 // CONCATENATED MODULE: ./home.js
 
-/* harmony default export */ var home = (function (_ref) {
-	var posts = _ref.posts;
+/* harmony default export */ var home_0 = (function (_ref) {
+	var posts = _ref.posts,
+	    path = _ref.path;
 	return Object(preact_min["h"])(
 		"div",
 		{ id: "post-list" },
@@ -1741,29 +1742,62 @@ preact_router_es_Router.Link = preact_router_es_Link;
 				Object(preact_min["h"])(
 					"h1",
 					{ className: "is-post-title" },
-					post.title
+					Object(preact_min["h"])(
+						"a",
+						{ href: path + "/" + post.id },
+						post.title
+					)
 				),
-				Object(preact_min["h"])(post.body, null)
+				Object(preact_min["h"])(
+					"h4",
+					{ "class": "is-post-date" },
+					post.created_at.toDateString()
+				)
 			);
 		})
 	);
 });
 // CONCATENATED MODULE: ./post.js
 
+
+
 /* harmony default export */ var post_0 = (function (_ref) {
-	var post = _ref.post,
-	    posts = _ref.posts;
-	return Object(preact_min["h"])(
-		"div",
-		null,
-		post
-	);
+	var postId = _ref.postId,
+	    posts = _ref.posts,
+	    home = _ref.home;
+
+	var post = posts.find(function (p) {
+		return p.id === Number(postId);
+	});
+	if (!post) {
+		route(home, true);
+	} else {
+		return Object(preact_min["h"])(
+			"div",
+			null,
+			Object(preact_min["h"])(
+				"h1",
+				{ className: "is-post-title" },
+				post.title
+			),
+			Object(preact_min["h"])(
+				"h4",
+				{ "class": "is-post-date" },
+				post.created_at.toDateString()
+			),
+			Object(preact_min["h"])(post.body, null)
+		);
+	}
 });
 // CONCATENATED MODULE: ./utils.js
-var req = function req(url) {
+var req = function req(url, headers) {
 	return new Promise(function (resolve, reject) {
 		var request = new XMLHttpRequest();
 		request.open('GET', url, true);
+
+		Object.keys(headers).forEach(function (header) {
+			return request.setRequestHeader(header, headers[header]);
+		});
 
 		request.onload = function () {
 			if (request.status >= 200 && request.status < 400) {
@@ -1820,7 +1854,17 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var USERNAME = 'louismerlin';
 var BLOG_NAME = 'blissue';
 
-var _ref2 = Object(preact_min["h"])('script', { async: true, src: 'https://www.googletagmanager.com/gtag/js?id=UA-105326072-5' });
+var _ref2 = Object(preact_min["h"])(
+	'div',
+	null,
+	Object(preact_min["h"])(
+		'h1',
+		{ className: 'has-text-centered is-blog-title' },
+		'LOADING....'
+	)
+);
+
+var _ref3 = Object(preact_min["h"])('script', { async: true, src: 'https://www.googletagmanager.com/gtag/js?id=UA-105326072-5' });
 
 var index_App = function (_Component) {
 	_inherits(App, _Component);
@@ -1844,7 +1888,10 @@ var index_App = function (_Component) {
 		var _this2 = this;
 
 		ga();
-		req('https://api.github.com/repos/' + USERNAME + '/' + BLOG_NAME + '/issues').then(function (issues) {
+		req('https://api.github.com/repos/' + USERNAME + '/' + BLOG_NAME + '/issues?labels=post', {
+			Accept: 'application/vnd.github.squirrel-girl-preview'
+		}).then(function (issues) {
+			console.log(issues);
 			_this2.setState({
 				posts: issues.filter(function (i) {
 					return i.author_association === 'OWNER';
@@ -1854,7 +1901,8 @@ var index_App = function (_Component) {
 						body: function body() {
 							return Object(preact_min["h"])(preact_markdown_default.a, { markdown: i.body });
 						},
-						title: i.title
+						title: i.title,
+						created_at: new Date(i.created_at)
 					};
 				}),
 				author: issues.find(function (i) {
@@ -1868,27 +1916,36 @@ var index_App = function (_Component) {
 		var posts = _ref.posts,
 		    author = _ref.author;
 
-		return Object(preact_min["h"])(
-			'div',
-			null,
-			_ref2,
-			Object(preact_min["h"])(
-				'h1',
-				{ className: 'has-text-centered is-blog-title' },
-				author + '\'',
-				's blog'
-			),
-			Object(preact_min["h"])(
-				'main',
+		var homeRoute = '/' + BLOG_NAME;
+		if (!posts.length) {
+			return _ref2;
+		} else {
+			return Object(preact_min["h"])(
+				'div',
 				null,
+				_ref3,
 				Object(preact_min["h"])(
-					preact_router_es_Router,
+					'h1',
+					{ className: 'has-text-centered is-blog-title' },
+					Object(preact_min["h"])(
+						'a',
+						{ href: homeRoute },
+						author + '\'',
+						's blog'
+					)
+				),
+				Object(preact_min["h"])(
+					'main',
 					null,
-					Object(preact_min["h"])(home, { path: '/' + BLOG_NAME, posts: posts }),
-					Object(preact_min["h"])(post_0, { path: '/' + BLOG_NAME + '/:post', posts: posts })
+					Object(preact_min["h"])(
+						preact_router_es_Router,
+						null,
+						Object(preact_min["h"])(home_0, { path: homeRoute, posts: posts }),
+						Object(preact_min["h"])(post_0, { path: '/' + BLOG_NAME + '/:postId', home: homeRoute, posts: posts })
+					)
 				)
-			)
-		);
+			);
+		}
 	};
 
 	return App;
