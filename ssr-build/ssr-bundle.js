@@ -1842,13 +1842,63 @@ var post_Reactions = function Reactions(_ref) {
 		);
 	}
 });
+// CONCATENATED MODULE: ./footer.js
+
+/* harmony default export */ var footer = (function (_ref) {
+	var author = _ref.author;
+	return Object(preact_min["h"])(
+		"div",
+		{ className: "footer" },
+		Object(preact_min["h"])(
+			"div",
+			{ className: "is-half" },
+			Object(preact_min["h"])(
+				"h2",
+				{ style: "margin-bottom: 0" },
+				author.name
+			),
+			Object(preact_min["h"])(
+				"h3",
+				{ style: "color: grey; margin-top: 0" },
+				Object(preact_min["h"])(
+					"a",
+					{ href: author.url },
+					author.login
+				)
+			),
+			Object(preact_min["h"])(
+				"p",
+				null,
+				"\uD83D\uDCCD\xA0\xA0",
+				author.location
+			)
+		),
+		Object(preact_min["h"])(
+			"div",
+			{ className: "is-half" },
+			Object(preact_min["h"])(
+				"p",
+				{ style: "color: grey" },
+				author.bio
+			),
+			Object(preact_min["h"])(
+				"a",
+				{
+					href: author.blog.startsWith('http://') || author.blog.startsWith('https://') ? author.blog : "http://" + author.blog
+				},
+				author.blog
+			)
+		)
+	);
+});
 // CONCATENATED MODULE: ./utils.js
 var req = function req(url, headers) {
 	return new Promise(function (resolve, reject) {
 		var request = new XMLHttpRequest();
 		request.open('GET', url, true);
 
-		Object.keys(headers).forEach(function (header) {
+		var h = headers || [];
+		Object.keys(h).forEach(function (header) {
 			return request.setRequestHeader(header, headers[header]);
 		});
 
@@ -1906,6 +1956,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
+
 var USERNAME = 'louismerlin';
 var BLOG_NAME = 'blissue';
 
@@ -1935,7 +1986,7 @@ var index_App = function (_Component) {
 
 		return _ret = (_temp = (_this = _possibleConstructorReturn(this, _Component.call.apply(_Component, [this].concat(args))), _this), _this.state = {
 			posts: [],
-			author: ''
+			author: {}
 		}, _temp), _possibleConstructorReturn(_this, _ret);
 	}
 
@@ -1961,10 +2012,19 @@ var index_App = function (_Component) {
 						url: i.html_url,
 						comments: i.comments
 					};
-				}),
-				author: issues.find(function (i) {
-					return i.author_association === 'OWNER';
-				}).user.login
+				})
+			});
+		});
+		req('https://api.github.com/users/' + USERNAME).then(function (user) {
+			_this2.setState({
+				author: {
+					login: user.login,
+					url: user.html_url,
+					name: user.name,
+					blog: user.blog,
+					location: user.location,
+					bio: user.bio
+				}
 			});
 		});
 	};
@@ -1974,7 +2034,7 @@ var index_App = function (_Component) {
 		    author = _ref.author;
 
 		var homeRoute = '/' + BLOG_NAME;
-		if (posts.length) {
+		if (posts.length && author !== {}) {
 			return Object(preact_min["h"])(
 				'div',
 				null,
@@ -1985,7 +2045,7 @@ var index_App = function (_Component) {
 					Object(preact_min["h"])(
 						'a',
 						{ href: homeRoute },
-						author + '\'',
+						author.login + '\'',
 						's blog'
 					)
 				),
@@ -1997,7 +2057,8 @@ var index_App = function (_Component) {
 						null,
 						Object(preact_min["h"])(home_0, { path: homeRoute, posts: posts }),
 						Object(preact_min["h"])(post_0, { path: '/' + BLOG_NAME + '/:postId', home: homeRoute, posts: posts })
-					)
+					),
+					Object(preact_min["h"])(footer, { author: author })
 				)
 			);
 		}
