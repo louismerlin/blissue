@@ -1761,10 +1761,62 @@ preact_router_es_Router.Link = preact_router_es_Link;
 
 
 
-/* harmony default export */ var post_0 = (function (_ref) {
-	var postId = _ref.postId,
-	    posts = _ref.posts,
-	    home = _ref.home;
+var post_Reactions = function Reactions(_ref) {
+	var reactions = _ref.reactions,
+	    link = _ref.link,
+	    comments = _ref.comments;
+	return Object(preact_min["h"])(
+		"a",
+		{ className: "reactions", href: link },
+		Object(preact_min["h"])(
+			"div",
+			{ className: "reaction" },
+			"\uD83D\uDC4D\xA0\xA0",
+			reactions['+1']
+		),
+		Object(preact_min["h"])(
+			"div",
+			{ className: "reaction" },
+			"\uD83D\uDC4E\xA0\xA0",
+			reactions['-1']
+		),
+		Object(preact_min["h"])(
+			"div",
+			{ className: "reaction" },
+			"\uD83D\uDE04\xA0\xA0",
+			reactions.laugh
+		),
+		Object(preact_min["h"])(
+			"div",
+			{ className: "reaction" },
+			"\uD83C\uDF89\xA0\xA0",
+			reactions.hooray
+		),
+		Object(preact_min["h"])(
+			"div",
+			{ className: "reaction" },
+			"\uD83D\uDE15\xA0\xA0",
+			reactions.confused
+		),
+		Object(preact_min["h"])(
+			"div",
+			{ className: "reaction" },
+			"\u2764\uFE0F\xA0\xA0",
+			reactions.heart
+		),
+		Object(preact_min["h"])(
+			"div",
+			{ className: "reaction" },
+			"\uD83D\uDCAC\xA0\xA0",
+			comments
+		)
+	);
+};
+
+/* harmony default export */ var post_0 = (function (_ref2) {
+	var postId = _ref2.postId,
+	    posts = _ref2.posts,
+	    home = _ref2.home;
 
 	var post = posts.find(function (p) {
 		return p.id === Number(postId);
@@ -1785,7 +1837,8 @@ preact_router_es_Router.Link = preact_router_es_Link;
 				{ "class": "is-post-date" },
 				post.created_at.toDateString()
 			),
-			Object(preact_min["h"])(post.body, null)
+			Object(preact_min["h"])(post.body, null),
+			Object(preact_min["h"])(post_Reactions, { reactions: post.reactions, link: post.url, comments: post.comments })
 		);
 	}
 });
@@ -1818,6 +1871,7 @@ var req = function req(url, headers) {
 	});
 };
 
+/* eslint-disable */
 var ga = function ga() {
 	window.dataLayer = window.dataLayer || [];
 	function gtag() {
@@ -1827,6 +1881,7 @@ var ga = function ga() {
 
 	gtag('config', 'UA-105326072-5');
 };
+/* eslint-enable */
 
 
 // EXTERNAL MODULE: ../node_modules/preact-markdown/index.js
@@ -1854,7 +1909,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var USERNAME = 'louismerlin';
 var BLOG_NAME = 'blissue';
 
-var _ref2 = Object(preact_min["h"])(
+var index__ref2 = Object(preact_min["h"])('script', { async: true, src: 'https://www.googletagmanager.com/gtag/js?id=UA-105326072-5' });
+
+var _ref3 = Object(preact_min["h"])(
 	'div',
 	null,
 	Object(preact_min["h"])(
@@ -1863,8 +1920,6 @@ var _ref2 = Object(preact_min["h"])(
 		'LOADING....'
 	)
 );
-
-var _ref3 = Object(preact_min["h"])('script', { async: true, src: 'https://www.googletagmanager.com/gtag/js?id=UA-105326072-5' });
 
 var index_App = function (_Component) {
 	_inherits(App, _Component);
@@ -1891,7 +1946,6 @@ var index_App = function (_Component) {
 		req('https://api.github.com/repos/' + USERNAME + '/' + BLOG_NAME + '/issues?labels=post', {
 			Accept: 'application/vnd.github.squirrel-girl-preview'
 		}).then(function (issues) {
-			console.log(issues);
 			_this2.setState({
 				posts: issues.filter(function (i) {
 					return i.author_association === 'OWNER';
@@ -1902,7 +1956,10 @@ var index_App = function (_Component) {
 							return Object(preact_min["h"])(preact_markdown_default.a, { markdown: i.body });
 						},
 						title: i.title,
-						created_at: new Date(i.created_at)
+						created_at: new Date(i.created_at),
+						reactions: i.reactions,
+						url: i.html_url,
+						comments: i.comments
 					};
 				}),
 				author: issues.find(function (i) {
@@ -1917,13 +1974,11 @@ var index_App = function (_Component) {
 		    author = _ref.author;
 
 		var homeRoute = '/' + BLOG_NAME;
-		if (!posts.length) {
-			return _ref2;
-		} else {
+		if (posts.length) {
 			return Object(preact_min["h"])(
 				'div',
 				null,
-				_ref3,
+				index__ref2,
 				Object(preact_min["h"])(
 					'h1',
 					{ className: 'has-text-centered is-blog-title' },
@@ -1946,6 +2001,7 @@ var index_App = function (_Component) {
 				)
 			);
 		}
+		return _ref3;
 	};
 
 	return App;
