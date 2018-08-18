@@ -19,10 +19,9 @@ export default class App extends Component {
 		req(
 			`https://api.github.com/repos/${USERNAME}/${BLOG_NAME}/issues?labels=post`,
 			{
-				Accept: 'application/vnd.github.squirrel-girl-preview',
+				Accept: 'application/vnd.github.squirrel-girl-preview'
 			}
 		).then(issues => {
-			console.log(issues)
 			this.setState({
 				posts: issues.filter(i => (
 					i.author_association === 'OWNER'
@@ -41,13 +40,11 @@ export default class App extends Component {
 	}
 
 	render(_, { posts, author }) {
-		const homeRoute = `/${BLOG_NAME}`
-		if (!posts.length) {
-			return (<div><h1 className="has-text-centered is-blog-title">LOADING....</h1></div>);
-		} else{
+		const homeRoute = `/${BLOG_NAME}`;
+		if (posts.length) {
 			return (
 				<div>
-					<script async src="https://www.googletagmanager.com/gtag/js?id=UA-105326072-5"></script>
+					<script async src="https://www.googletagmanager.com/gtag/js?id=UA-105326072-5" />
 					<h1 className="has-text-centered is-blog-title">
 						<a href={homeRoute}>{author + `'`}s blog</a>
 					</h1>
@@ -60,5 +57,6 @@ export default class App extends Component {
 				</div>
 			);
 		}
+		return (<div><h1 className="has-text-centered is-blog-title">LOADING....</h1></div>);
 	}
 }

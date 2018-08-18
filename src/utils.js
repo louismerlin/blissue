@@ -4,7 +4,7 @@ const req = (url, headers) => new Promise((resolve, reject) => {
 
 	Object.keys(headers).forEach(header =>
 		request.setRequestHeader(header, headers[header])
-	)
+	);
 
 	request.onload = () => {
 		if (request.status >= 200 && request.status < 400) {
@@ -25,6 +25,7 @@ const req = (url, headers) => new Promise((resolve, reject) => {
 	request.send();
 });
 
+/* eslint-disable */
 const ga = () => {
 	window.dataLayer = window.dataLayer || [];
 	function gtag(){dataLayer.push(arguments);}
@@ -32,5 +33,6 @@ const ga = () => {
 
   gtag('config', 'UA-105326072-5');
 }
+/* eslint-enable */
 
 export { req, ga };
