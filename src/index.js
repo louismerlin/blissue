@@ -30,7 +30,10 @@ export default class App extends Component {
 					id: i.id,
 					body: () => (<Markdown markdown={i.body} />),
 					title: i.title,
-					created_at: new Date(i.created_at)
+					created_at: new Date(i.created_at),
+					reactions: i.reactions,
+					url: i.html_url,
+					comments: i.comments
 				})),
 				author: issues.find(i => i.author_association === 'OWNER').user.login
 			});
@@ -42,19 +45,20 @@ export default class App extends Component {
 		if (!posts.length) {
 			return (<div><h1 className="has-text-centered is-blog-title">LOADING....</h1></div>);
 		} else{
-		return (
-			<div>
-				<script async src="https://www.googletagmanager.com/gtag/js?id=UA-105326072-5"></script>
-				<h1 className="has-text-centered is-blog-title">
-					<a href={homeRoute}>{author + `'`}s blog</a>
-				</h1>
-				<main>
-					<Router>
-						<Home path={homeRoute} posts={posts} />
-						<Post path={`/${BLOG_NAME}/:postId`} home={homeRoute} posts={posts} />
-					</Router>
-				</main>
-			</div>
-		);
-	}}
+			return (
+				<div>
+					<script async src="https://www.googletagmanager.com/gtag/js?id=UA-105326072-5"></script>
+					<h1 className="has-text-centered is-blog-title">
+						<a href={homeRoute}>{author + `'`}s blog</a>
+					</h1>
+					<main>
+						<Router>
+							<Home path={homeRoute} posts={posts} />
+							<Post path={`/${BLOG_NAME}/:postId`} home={homeRoute} posts={posts} />
+						</Router>
+					</main>
+				</div>
+			);
+		}
+	}
 }
