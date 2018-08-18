@@ -1,3 +1,5 @@
+import './ga';
+
 const req = url => new Promise((resolve, reject) => {
 	const request = new XMLHttpRequest();
 	request.open('GET', url, true);
@@ -21,4 +23,12 @@ const req = url => new Promise((resolve, reject) => {
 	request.send();
 });
 
-export { req };
+const ga = () => {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+
+  gtag('config', 'UA-105326072-5');
+}
+
+export { req, ga };

@@ -3,9 +3,8 @@ import { Component } from 'preact';
 import { Router } from 'preact-router';
 import Home from './home';
 import Post from './post';
-import { req } from './utils';
+import { req, ga } from './utils';
 import Markdown from 'preact-markdown';
-import analytics from 'universal-ga';
 
 const USERNAME = 'louismerlin';
 const BLOG_NAME = 'blissue';
@@ -16,7 +15,7 @@ export default class App extends Component {
 		author: ''
 	}
 	componentDidMount() {
-		analytics.initialize('UA-105326072-5');
+		ga();
 		req(`https://api.github.com/repos/${USERNAME}/${BLOG_NAME}/issues`).then(issues => {
 			this.setState({
 				posts: issues.filter(i => i.author_association === 'OWNER').map(i => ({
