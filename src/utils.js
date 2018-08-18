@@ -2,7 +2,8 @@ const req = (url, headers) => new Promise((resolve, reject) => {
 	const request = new XMLHttpRequest();
 	request.open('GET', url, true);
 
-	Object.keys(headers).forEach(header =>
+	const h = headers || [];
+	Object.keys(h).forEach(header =>
 		request.setRequestHeader(header, headers[header])
 	);
 
