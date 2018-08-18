@@ -21,3 +21,9 @@ main {
 	font-size: 3em;
 
 }
+
+.markup > p > img {
+	max-width: 100%;
+	margin: auto auto;
+	display: block;
+}

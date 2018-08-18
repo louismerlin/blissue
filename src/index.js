@@ -5,6 +5,9 @@ import Home from './home';
 import Post from './post';
 import { req } from './utils';
 import Markdown from 'preact-markdown';
+import analytics from 'universal-ga';
+
+analytics.initialize('UA-105326072-5');
 
 const USERNAME = 'louismerlin';
 const BLOG_NAME = 'blissue';

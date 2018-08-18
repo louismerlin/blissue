@@ -31,6 +31,7 @@
     "preact": "^8.2.1",
     "preact-compat": "^3.17.0",
     "preact-markdown": "^0.4.0",
-    "preact-router": "^2.6.1"
+    "preact-router": "^2.6.1",
+    "universal-ga": "^1.2.0"
   }
 }
