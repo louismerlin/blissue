@@ -31,6 +31,7 @@ export default class App extends Component {
 	render(_, { posts, author }) {
 		return (
 			<div>
+				<script async src="https://www.googletagmanager.com/gtag/js?id=UA-105326072-5"></script>
 				<h1 className="has-text-centered is-blog-title">{author + `'`}s blog</h1>
 				<main>
 					<Router>

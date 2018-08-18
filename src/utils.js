@@ -1,5 +1,3 @@
-import './ga';
-
 const req = url => new Promise((resolve, reject) => {
 	const request = new XMLHttpRequest();
 	request.open('GET', url, true);
