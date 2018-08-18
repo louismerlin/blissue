@@ -19,11 +19,22 @@ main {
 
 .is-post-title {
 	font-size: 3em;
+	margin-bottom: 0;
+}
 
+.is-post-date {
+	text-align: right;
+	margin-top: 0;
+	color: grey;
 }
 
 .markup > p > img {
 	max-width: 100%;
 	margin: auto auto;
 	display: block;
+}
+
+h1 > a {
+	color: black;
+	text-decoration: none;
 }
