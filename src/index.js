@@ -16,9 +16,17 @@ export default class App extends Component {
 	}
 	componentDidMount() {
 		ga();
-		req(`https://api.github.com/repos/${USERNAME}/${BLOG_NAME}/issues`).then(issues => {
+		req(
+			`https://api.github.com/repos/${USERNAME}/${BLOG_NAME}/issues?labels=post`,
+			{
+				Accept: 'application/vnd.github.squirrel-girl-preview',
+			}
+		).then(issues => {
+			console.log(issues)
 			this.setState({
-				posts: issues.filter(i => i.author_association === 'OWNER').map(i => ({
+				posts: issues.filter(i => (
+					i.author_association === 'OWNER'
+				)).map(i => ({
 					id: i.id,
 					body: () => (<Markdown markdown={i.body} />),
 					title: i.title

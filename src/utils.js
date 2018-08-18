@@ -1,6 +1,10 @@
-const req = url => new Promise((resolve, reject) => {
+const req = (url, headers) => new Promise((resolve, reject) => {
 	const request = new XMLHttpRequest();
 	request.open('GET', url, true);
+
+	Object.keys(headers).forEach(header =>
+		request.setRequestHeader(header, headers[header])
+	)
 
 	request.onload = () => {
 		if (request.status >= 200 && request.status < 400) {
