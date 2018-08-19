@@ -26,10 +26,10 @@ const Reactions = ({ reactions, link, comments }) => (
 	</a>
 );
 
-export default ({ postId, posts, home }) => {
+export default ({ postId, posts }) => {
 	const post = posts.find(p => p.id === Number(postId));
 	if (!post) {
-		route(home, true);
+		route('/', true);
 	}
 	else {
 		return (

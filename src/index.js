@@ -6,6 +6,7 @@ import Post from './post';
 import Footer from './footer';
 import { req, ga } from './utils';
 import Markdown from 'preact-markdown';
+import createHashHistory from 'history/createHashHistory';
 
 const USERNAME = 'louismerlin';
 const BLOG_NAME = 'blissue';
@@ -42,28 +43,27 @@ export default class App extends Component {
 				author: {
 					login: user.login,
 					url: user.html_url,
-					name: user.name,
-					blog: user.blog,
-					location: user.location,
-					bio: user.bio
+					name: user.name || '',
+					blog: user.blog || '',
+					location: user.location || '',
+					bio: user.bio || ''
 				}
 			});
 		});
 	}
 
 	render(_, { posts, author }) {
-		const homeRoute = `/${BLOG_NAME}`;
 		if (posts.length && author !== {}) {
 			return (
 				<div>
 					<script async src="https://www.googletagmanager.com/gtag/js?id=UA-105326072-5" />
 					<h1 className="has-text-centered is-blog-title">
-						<a href={homeRoute}>{author.login + `'`}s blog</a>
+						<a href="/">{author.login + `'`}s blog</a>
 					</h1>
 					<main>
-						<Router>
-							<Home path={homeRoute} posts={posts} />
-							<Post path={`/${BLOG_NAME}/:postId`} home={homeRoute} posts={posts} />
+						<Router history={createHashHistory()}>
+							<Home path="/" posts={posts} />
+							<Post path="/:postId" posts={posts} />
 						</Router>
 						<Footer author={author} />
 					</main>
