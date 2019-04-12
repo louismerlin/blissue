@@ -1776,7 +1776,7 @@ var post_Reactions = function Reactions(_ref) {
       comments = _ref.comments;
   return Object(preact_min["h"])(
     'a',
-    { className: 'row reactions', href: link },
+    { className: 'row mobile reactions', href: link },
     Object(preact_min["h"])(
       'div',
       { className: 'column' },
@@ -1856,46 +1856,50 @@ var post_Reactions = function Reactions(_ref) {
   var author = _ref.author;
   return Object(preact_min["h"])(
     'div',
-    { className: 'footer row' },
+    { className: 'footer' },
     Object(preact_min["h"])(
       'div',
-      { className: 'column' },
+      { className: 'row' },
       Object(preact_min["h"])(
-        'h2',
-        { style: 'margin-bottom: 0' },
-        author.name
-      ),
-      Object(preact_min["h"])(
-        'a',
-        {
-          href: author.blog.startsWith('http://') || author.blog.startsWith('https://') ? author.blog : 'http://' + author.blog
-        },
-        author.blog
-      ),
-      Object(preact_min["h"])(
-        'p',
-        null,
-        author.bio
-      )
-    ),
-    Object(preact_min["h"])(
-      'div',
-      { className: 'column' },
-      Object(preact_min["h"])(
-        'h3',
-        null,
-        'GitHub: ',
+        'div',
+        { className: 'column' },
+        Object(preact_min["h"])(
+          'h2',
+          { style: 'margin-bottom: 0' },
+          author.name
+        ),
         Object(preact_min["h"])(
           'a',
-          { href: author.url },
-          author.login
+          {
+            href: author.blog.startsWith('http://') || author.blog.startsWith('https://') ? author.blog : 'http://' + author.blog
+          },
+          author.blog
+        ),
+        Object(preact_min["h"])(
+          'p',
+          null,
+          author.bio
         )
       ),
       Object(preact_min["h"])(
-        'p',
-        null,
-        '\uD83D\uDCCD\xA0\xA0',
-        author.location
+        'div',
+        { className: 'column' },
+        Object(preact_min["h"])(
+          'h3',
+          null,
+          'GitHub: ',
+          Object(preact_min["h"])(
+            'a',
+            { href: author.url },
+            author.login
+          )
+        ),
+        Object(preact_min["h"])(
+          'p',
+          null,
+          '\uD83D\uDCCD\xA0\xA0',
+          author.location
+        )
       )
     )
   );
@@ -3063,7 +3067,9 @@ var BLOG_NAME = 'blissue';
 
 var index__ref2 = Object(preact_min["h"])('link', { href: 'https://fonts.googleapis.com/css?family=Chivo:400,700', rel: 'stylesheet' });
 
-var _ref3 = Object(preact_min["h"])(
+var _ref3 = Object(preact_min["h"])('script', { async: true, src: 'https://www.googletagmanager.com/gtag/js?id=UA-105326072-5' });
+
+var _ref4 = Object(preact_min["h"])(
   'div',
   { className: 'container blog-title' },
   Object(preact_min["h"])(
@@ -3136,6 +3142,7 @@ var index_App = function (_Component) {
         'div',
         null,
         index__ref2,
+        _ref3,
         Object(preact_min["h"])(
           'header',
           { className: 'container blog-title' },
@@ -3163,7 +3170,7 @@ var index_App = function (_Component) {
         )
       );
     }
-    return _ref3;
+    return _ref4;
   };
 
   return App;
