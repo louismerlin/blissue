@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "blissue",
-  "version": "1.0.0",
+  "version": "0.2.0",
   "homepage": "https://louismerlin.github.io/blissue",
   "license": "MIT",
   "scripts": {
