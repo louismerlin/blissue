@@ -1775,9 +1775,9 @@ concat-stream@^1.5.0:
     typedarray "^0.0.6"
 
 concrete.css@^0.1.1:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/concrete.css/-/concrete.css-0.1.1.tgz#7530917d9b3b0d23be10c11071191310ab49af5f"
-  integrity sha512-pzanBkCWzq0H9WEHSWK6SGlHcvhVpt0Sziz8yDNW634IXPW2QZ3yHHF64B6HdD3V9l1XJ/0axtg8JCV1jFhgoQ==
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/concrete.css/-/concrete.css-0.1.2.tgz#0538ad81078ac76af7cc1638dc85a2c4fc415801"
+  integrity sha512-q+bKZnAMdi4taqJmZxqXcZ1Bzj3SMPvu2zA/SmosFKJHoFaZNWBmS06qAXz7Y2l5XJdN2HGGLSuTFHKyf2ms4Q==
 
 config-chain@^1.1.11:
   version "1.1.12"

@@ -11,6 +11,8 @@
 
 .post-date {
   margin-top: 0;
+  margin-bottom: 4rem;
+  border-bottom: solid 0.1rem black;
   text-align: right;
 }
 
@@ -22,10 +24,7 @@
 
 .footer {
   border: solid 0.1rem black;
+  padding: 0 1rem;
   margin-top: 10rem;
   margin-bottom: 4rem;
-}
-
-.row .column {
-  padding: 0 3rem;
 }

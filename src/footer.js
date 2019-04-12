@@ -1,5 +1,6 @@
 export default ({ author }) => (
-  <div className='footer row'>
+  <div className="footer">
+  <div className='row'>
     <div className='column'>
       <h2 style='margin-bottom: 0'>{author.name}</h2>
       <a
@@ -16,6 +17,7 @@ export default ({ author }) => (
     <div className='column'>
       <h3>GitHub: <a href={author.url}>{author.login}</a></h3>
       <p>📍&nbsp;&nbsp;{author.location}</p>
+    </div>
     </div>
   </div>
 )

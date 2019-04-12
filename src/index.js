@@ -62,6 +62,7 @@ export default class App extends Component {
       return (
         <div>
           <link href='https://fonts.googleapis.com/css?family=Chivo:400,700' rel='stylesheet' />
+          <script async src="https://www.googletagmanager.com/gtag/js?id=UA-105326072-5" />
           <header className='container blog-title'>
             <h1>
               <a href='/'>{author.login + `'`}s blog</a>

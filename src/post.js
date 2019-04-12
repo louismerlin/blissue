@@ -1,7 +1,7 @@
 import { route } from 'preact-router'
 
 const Reactions = ({ reactions, link, comments }) => (
-  <a className='row reactions' href={link}>
+  <a className='row mobile reactions' href={link}>
     <div className='column'>
       👍&nbsp;&nbsp;{reactions['+1']}
     </div>
