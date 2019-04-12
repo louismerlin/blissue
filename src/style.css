@@ -1,62 +1,31 @@
-html, body {
-	font: 14px/1.21 'Helvetica Neue', arial, sans-serif;
-	font-weight: 400;
+.blog-title {
+  text-align: center;
+  font-size: 3rem;
+  margin-bottom: 4rem;
 }
 
-main {
-	margin: 0 auto;
-	max-width: 640px;
+.post-title {
+  font-size: 3rem;
+  margin-bottom: 0;
 }
 
-.has-text-centered {
-	text-align: center;
-}
-
-.is-blog-title {
-	font-size: 4em;
-	text-shadow: 2px 2px 1px grey;
-}
-
-.is-post-title {
-	font-size: 3em;
-	margin-bottom: 0;
-}
-
-.is-post-date {
-	text-align: right;
-	margin-top: 0;
-	color: grey;
-}
-
-.markup > p > img {
-	max-width: 100%;
-	margin: auto auto;
-	display: block;
-}
-
-h1 > a {
-	color: black;
-	text-decoration: none;
+.post-date {
+  margin-top: 0;
+  text-align: right;
 }
 
 .reactions {
-	display: flex;
-	justify-content: space-around;
-	width: 100%;
-}
-
-a.reactions {
-	color: black;
-	text-decoration: none;
+  padding-top: 6rem;
+  text-decoration: none;
+  text-align: center;
 }
 
 .footer {
-	margin-top: 2em;
-	border: 1px solid grey;
-	border-radius: 12px;
-	display: flex;
+  border: solid 0.1rem black;
+  margin-top: 10rem;
+  margin-bottom: 4rem;
 }
-.footer > .is-half {
-	margin: 0.6em 1.8em 0.6em 1.8em;
-	flex-basis: 50%;
+
+.row .column {
+  padding: 0 3rem;
 }
