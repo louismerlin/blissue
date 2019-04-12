@@ -66,100 +66,6 @@ module.exports =
 /************************************************************************/
 /******/ ({
 
-/***/ "/Uqj":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-exports.__esModule = true;
-
-var _warning = __webpack_require__("XOCG");
-
-var _warning2 = _interopRequireDefault(_warning);
-
-function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : { default: obj };
-}
-
-var createTransitionManager = function createTransitionManager() {
-  var prompt = null;
-
-  var setPrompt = function setPrompt(nextPrompt) {
-    (0, _warning2.default)(prompt == null, 'A history supports only one prompt at a time');
-
-    prompt = nextPrompt;
-
-    return function () {
-      if (prompt === nextPrompt) prompt = null;
-    };
-  };
-
-  var confirmTransitionTo = function confirmTransitionTo(location, action, getUserConfirmation, callback) {
-    // TODO: If another transition starts while we're still confirming
-    // the previous one, we may end up in a weird state. Figure out the
-    // best way to handle this.
-    if (prompt != null) {
-      var result = typeof prompt === 'function' ? prompt(location, action) : prompt;
-
-      if (typeof result === 'string') {
-        if (typeof getUserConfirmation === 'function') {
-          getUserConfirmation(result, callback);
-        } else {
-          (0, _warning2.default)(false, 'A history needs a getUserConfirmation function in order to use a prompt message');
-
-          callback(true);
-        }
-      } else {
-        // Return false from a transition hook to cancel the transition.
-        callback(result !== false);
-      }
-    } else {
-      callback(true);
-    }
-  };
-
-  var listeners = [];
-
-  var appendListener = function appendListener(fn) {
-    var isActive = true;
-
-    var listener = function listener() {
-      if (isActive) fn.apply(undefined, arguments);
-    };
-
-    listeners.push(listener);
-
-    return function () {
-      isActive = false;
-      listeners = listeners.filter(function (item) {
-        return item !== listener;
-      });
-    };
-  };
-
-  var notifyListeners = function notifyListeners() {
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
-    listeners.forEach(function (listener) {
-      return listener.apply(undefined, args);
-    });
-  };
-
-  return {
-    setPrompt: setPrompt,
-    confirmTransitionTo: confirmTransitionTo,
-    appendListener: appendListener,
-    notifyListeners: notifyListeners
-  };
-};
-
-exports.default = createTransitionManager;
-
-/***/ }),
-
 /***/ "3F7m":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1430,148 +1336,17 @@ exports.default = createTransitionManager;
 
 /***/ }),
 
-/***/ "4gcd":
-/***/ (function(module, exports, __webpack_require__) {
+/***/ "DOAq":
+/***/ (function(module, exports) {
 
-"use strict";
-
-
-exports.__esModule = true;
-var addLeadingSlash = exports.addLeadingSlash = function addLeadingSlash(path) {
-  return path.charAt(0) === '/' ? path : '/' + path;
-};
-
-var stripLeadingSlash = exports.stripLeadingSlash = function stripLeadingSlash(path) {
-  return path.charAt(0) === '/' ? path.substr(1) : path;
-};
-
-var hasBasename = exports.hasBasename = function hasBasename(path, prefix) {
-  return new RegExp('^' + prefix + '(\\/|\\?|#|$)', 'i').test(path);
-};
-
-var stripBasename = exports.stripBasename = function stripBasename(path, prefix) {
-  return hasBasename(path, prefix) ? path.substr(prefix.length) : path;
-};
-
-var stripTrailingSlash = exports.stripTrailingSlash = function stripTrailingSlash(path) {
-  return path.charAt(path.length - 1) === '/' ? path.slice(0, -1) : path;
-};
-
-var parsePath = exports.parsePath = function parsePath(path) {
-  var pathname = path || '/';
-  var search = '';
-  var hash = '';
-
-  var hashIndex = pathname.indexOf('#');
-  if (hashIndex !== -1) {
-    hash = pathname.substr(hashIndex);
-    pathname = pathname.substr(0, hashIndex);
-  }
-
-  var searchIndex = pathname.indexOf('?');
-  if (searchIndex !== -1) {
-    search = pathname.substr(searchIndex);
-    pathname = pathname.substr(0, searchIndex);
-  }
-
-  return {
-    pathname: pathname,
-    search: search === '?' ? '' : search,
-    hash: hash === '#' ? '' : hash
-  };
-};
-
-var createPath = exports.createPath = function createPath(location) {
-  var pathname = location.pathname,
-      search = location.search,
-      hash = location.hash;
-
-  var path = pathname || '/';
-
-  if (search && search !== '?') path += search.charAt(0) === '?' ? search : '?' + search;
-
-  if (hash && hash !== '#') path += hash.charAt(0) === '#' ? hash : '#' + hash;
-
-  return path;
-};
+// removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ "7YO4":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ "EZGJ":
+/***/ (function(module, exports) {
 
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-function isAbsolute(pathname) {
-  return pathname.charAt(0) === '/';
-}
-
-// About 1.5x faster than the two-arg version of Array#splice()
-function spliceOne(list, index) {
-  for (var i = index, k = i + 1, n = list.length; k < n; i += 1, k += 1) {
-    list[i] = list[k];
-  }
-
-  list.pop();
-}
-
-// This implementation is based heavily on node's url.parse
-function resolvePathname(to) {
-  var from = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
-
-  var toParts = to && to.split('/') || [];
-  var fromParts = from && from.split('/') || [];
-
-  var isToAbs = to && isAbsolute(to);
-  var isFromAbs = from && isAbsolute(from);
-  var mustEndAbs = isToAbs || isFromAbs;
-
-  if (to && isAbsolute(to)) {
-    // to is absolute
-    fromParts = toParts;
-  } else if (toParts.length) {
-    // to is relative, drop the filename
-    fromParts.pop();
-    fromParts = fromParts.concat(toParts);
-  }
-
-  if (!fromParts.length) return '/';
-
-  var hasTrailingSlash = void 0;
-  if (fromParts.length) {
-    var last = fromParts[fromParts.length - 1];
-    hasTrailingSlash = last === '.' || last === '..' || last === '';
-  } else {
-    hasTrailingSlash = false;
-  }
-
-  var up = 0;
-  for (var i = fromParts.length; i >= 0; i--) {
-    var part = fromParts[i];
-
-    if (part === '.') {
-      spliceOne(fromParts, i);
-    } else if (part === '..') {
-      spliceOne(fromParts, i);
-      up++;
-    } else if (up) {
-      spliceOne(fromParts, i);
-      up--;
-    }
-  }
-
-  if (!mustEndAbs) for (; up--; up) {
-    fromParts.unshift('..');
-  }if (mustEndAbs && fromParts[0] !== '' && (!fromParts[0] || !isAbsolute(fromParts[0]))) fromParts.unshift('');
-
-  var result = fromParts.join('/');
-
-  if (hasTrailingSlash && result.substr(-1) !== '/') result += '/';
-
-  return result;
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (resolvePathname);
+// removed by extract-text-webpack-plugin
 
 /***/ }),
 
@@ -1591,10 +1366,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 // EXTERNAL MODULE: ../node_modules/preact/dist/preact.min.js
 var preact_min = __webpack_require__("KM04");
 var preact_min_default = /*#__PURE__*/__webpack_require__.n(preact_min);
-
-// EXTERNAL MODULE: ./style.css
-var style = __webpack_require__("FWi5");
-var style_default = /*#__PURE__*/__webpack_require__.n(style);
 
 // CONCATENATED MODULE: ../node_modules/preact-router/dist/preact-router.es.js
 
@@ -1969,215 +1740,1301 @@ preact_router_es_Router.Link = preact_router_es_Link;
 // CONCATENATED MODULE: ./home.js
 
 /* harmony default export */ var home = (function (_ref) {
-	var posts = _ref.posts;
-	return Object(preact_min["h"])(
-		"div",
-		{ id: "post-list" },
-		posts.map(function (post) {
-			return Object(preact_min["h"])(
-				"div",
-				{ className: "post-in-list" },
-				Object(preact_min["h"])(
-					"h1",
-					{ className: "is-post-title" },
-					Object(preact_min["h"])(
-						"a",
-						{ href: "/" + post.id },
-						post.title
-					)
-				),
-				Object(preact_min["h"])(
-					"h4",
-					{ "class": "is-post-date" },
-					post.created_at.toDateString()
-				)
-			);
-		})
-	);
+  var posts = _ref.posts;
+  return Object(preact_min["h"])(
+    'div',
+    { id: 'post-list' },
+    posts.map(function (post) {
+      return Object(preact_min["h"])(
+        'div',
+        null,
+        Object(preact_min["h"])(
+          'h2',
+          { className: 'post-title' },
+          Object(preact_min["h"])(
+            'a',
+            { href: '/' + post.id },
+            post.title
+          )
+        ),
+        Object(preact_min["h"])(
+          'h4',
+          { className: 'post-date' },
+          post.created_at.toDateString()
+        )
+      );
+    })
+  );
 });
 // CONCATENATED MODULE: ./post.js
 
 
 
 var post_Reactions = function Reactions(_ref) {
-	var reactions = _ref.reactions,
-	    link = _ref.link,
-	    comments = _ref.comments;
-	return Object(preact_min["h"])(
-		"a",
-		{ className: "reactions", href: link },
-		Object(preact_min["h"])(
-			"div",
-			{ className: "reaction" },
-			"\uD83D\uDC4D\xA0\xA0",
-			reactions['+1']
-		),
-		Object(preact_min["h"])(
-			"div",
-			{ className: "reaction" },
-			"\uD83D\uDC4E\xA0\xA0",
-			reactions['-1']
-		),
-		Object(preact_min["h"])(
-			"div",
-			{ className: "reaction" },
-			"\uD83D\uDE04\xA0\xA0",
-			reactions.laugh
-		),
-		Object(preact_min["h"])(
-			"div",
-			{ className: "reaction" },
-			"\uD83C\uDF89\xA0\xA0",
-			reactions.hooray
-		),
-		Object(preact_min["h"])(
-			"div",
-			{ className: "reaction" },
-			"\uD83D\uDE15\xA0\xA0",
-			reactions.confused
-		),
-		Object(preact_min["h"])(
-			"div",
-			{ className: "reaction" },
-			"\u2764\uFE0F\xA0\xA0",
-			reactions.heart
-		),
-		Object(preact_min["h"])(
-			"div",
-			{ className: "reaction" },
-			"\uD83D\uDCAC\xA0\xA0",
-			comments
-		)
-	);
+  var reactions = _ref.reactions,
+      link = _ref.link,
+      comments = _ref.comments;
+  return Object(preact_min["h"])(
+    'a',
+    { className: 'row reactions', href: link },
+    Object(preact_min["h"])(
+      'div',
+      { className: 'column' },
+      '\uD83D\uDC4D\xA0\xA0',
+      reactions['+1']
+    ),
+    Object(preact_min["h"])(
+      'div',
+      { className: 'column' },
+      '\uD83D\uDC4E\xA0\xA0',
+      reactions['-1']
+    ),
+    Object(preact_min["h"])(
+      'div',
+      { className: 'column' },
+      '\uD83D\uDE04\xA0\xA0',
+      reactions.laugh
+    ),
+    Object(preact_min["h"])(
+      'div',
+      { className: 'column' },
+      '\uD83C\uDF89\xA0\xA0',
+      reactions.hooray
+    ),
+    Object(preact_min["h"])(
+      'div',
+      { className: 'column' },
+      '\uD83D\uDE15\xA0\xA0',
+      reactions.confused
+    ),
+    Object(preact_min["h"])(
+      'div',
+      { className: 'column' },
+      '\u2764\uFE0F\xA0\xA0',
+      reactions.heart
+    ),
+    Object(preact_min["h"])(
+      'div',
+      { className: 'column' },
+      '\uD83D\uDCAC\xA0\xA0',
+      comments
+    )
+  );
 };
 
 /* harmony default export */ var post_0 = (function (_ref2) {
-	var postId = _ref2.postId,
-	    posts = _ref2.posts;
+  var postId = _ref2.postId,
+      posts = _ref2.posts;
 
-	var post = posts.find(function (p) {
-		return p.id === Number(postId);
-	});
-	if (!post) {
-		route('/', true);
-	} else {
-		return Object(preact_min["h"])(
-			"div",
-			null,
-			Object(preact_min["h"])(
-				"h1",
-				{ className: "is-post-title" },
-				post.title
-			),
-			Object(preact_min["h"])(
-				"h4",
-				{ "class": "is-post-date" },
-				post.created_at.toDateString()
-			),
-			Object(preact_min["h"])(post.body, null),
-			Object(preact_min["h"])(post_Reactions, { reactions: post.reactions, link: post.url, comments: post.comments })
-		);
-	}
+  var post = posts.find(function (p) {
+    return p.id === Number(postId);
+  });
+  if (!post) {
+    route('/', true);
+  } else {
+    return Object(preact_min["h"])(
+      'div',
+      null,
+      Object(preact_min["h"])(
+        'h2',
+        { className: 'post-title' },
+        post.title
+      ),
+      Object(preact_min["h"])(
+        'h4',
+        { 'class': 'post-date' },
+        post.created_at.toDateString()
+      ),
+      Object(preact_min["h"])(post.body, null),
+      Object(preact_min["h"])(post_Reactions, { reactions: post.reactions, link: post.url, comments: post.comments })
+    );
+  }
 });
 // CONCATENATED MODULE: ./footer.js
 
 /* harmony default export */ var footer = (function (_ref) {
-	var author = _ref.author;
-	return Object(preact_min["h"])(
-		"div",
-		{ className: "footer" },
-		Object(preact_min["h"])(
-			"div",
-			{ className: "is-half" },
-			Object(preact_min["h"])(
-				"h2",
-				{ style: "margin-bottom: 0" },
-				author.name
-			),
-			Object(preact_min["h"])(
-				"h3",
-				{ style: "color: grey; margin-top: 0" },
-				Object(preact_min["h"])(
-					"a",
-					{ href: author.url },
-					author.login
-				)
-			),
-			Object(preact_min["h"])(
-				"p",
-				null,
-				"\uD83D\uDCCD\xA0\xA0",
-				author.location
-			)
-		),
-		Object(preact_min["h"])(
-			"div",
-			{ className: "is-half" },
-			Object(preact_min["h"])(
-				"p",
-				{ style: "color: grey" },
-				author.bio
-			),
-			Object(preact_min["h"])(
-				"a",
-				{
-					href: author.blog.startsWith('http://') || author.blog.startsWith('https://') ? author.blog : "http://" + author.blog
-				},
-				author.blog
-			)
-		)
-	);
+  var author = _ref.author;
+  return Object(preact_min["h"])(
+    'div',
+    { className: 'footer row' },
+    Object(preact_min["h"])(
+      'div',
+      { className: 'column' },
+      Object(preact_min["h"])(
+        'h2',
+        { style: 'margin-bottom: 0' },
+        author.name
+      ),
+      Object(preact_min["h"])(
+        'a',
+        {
+          href: author.blog.startsWith('http://') || author.blog.startsWith('https://') ? author.blog : 'http://' + author.blog
+        },
+        author.blog
+      ),
+      Object(preact_min["h"])(
+        'p',
+        null,
+        author.bio
+      )
+    ),
+    Object(preact_min["h"])(
+      'div',
+      { className: 'column' },
+      Object(preact_min["h"])(
+        'h3',
+        null,
+        'GitHub: ',
+        Object(preact_min["h"])(
+          'a',
+          { href: author.url },
+          author.login
+        )
+      ),
+      Object(preact_min["h"])(
+        'p',
+        null,
+        '\uD83D\uDCCD\xA0\xA0',
+        author.location
+      )
+    )
+  );
 });
 // CONCATENATED MODULE: ./utils.js
+var _global = global,
+    XMLHttpRequest = _global.XMLHttpRequest;
+
+
 var req = function req(url, headers) {
-	return new Promise(function (resolve, reject) {
-		var request = new XMLHttpRequest();
-		request.open('GET', url, true);
+  return new Promise(function (resolve, reject) {
+    var request = new XMLHttpRequest();
+    request.open('GET', url, true);
 
-		var h = headers || [];
-		Object.keys(h).forEach(function (header) {
-			return request.setRequestHeader(header, headers[header]);
-		});
+    var h = headers || [];
+    Object.keys(h).forEach(function (header) {
+      return request.setRequestHeader(header, headers[header]);
+    });
 
-		request.onload = function () {
-			if (request.status >= 200 && request.status < 400) {
-				var data = JSON.parse(request.responseText);
-				resolve(data);
-			} else {
-				// We reached our target server, but it returned an error
-				reject(request.status);
-			}
-		};
+    request.onload = function () {
+      if (request.status >= 200 && request.status < 400) {
+        var data = JSON.parse(request.responseText);
+        resolve(data);
+      } else {
+        // We reached our target server, but it returned an error
+        reject(request.status);
+      }
+    };
 
-		request.onerror = function () {
-			// There was a connection error of some sort
-			reject('Connection error');
-		};
+    request.onerror = function () {
+      // There was a connection error of some sort
+      reject(new Error('Connection error'));
+    };
 
-		request.send();
-	});
+    request.send();
+  });
 };
 
-/* eslint-disable */
 var ga = function ga() {
-	window.dataLayer = window.dataLayer || [];
-	function gtag() {
-		dataLayer.push(arguments);
-	}
-	gtag('js', new Date());
+  var _global2 = global,
+      window = _global2.window;
 
-	gtag('config', 'UA-105326072-5');
+  var dataLayer = window.dataLayer || [];
+  function gtag() {
+    dataLayer.push(arguments);
+  }
+  gtag('js', new Date());
+
+  gtag('config', 'UA-105326072-5');
 };
-/* eslint-enable */
 
 
 // EXTERNAL MODULE: ../node_modules/preact-markdown/index.js
 var preact_markdown = __webpack_require__("VidE");
 var preact_markdown_default = /*#__PURE__*/__webpack_require__.n(preact_markdown);
 
-// EXTERNAL MODULE: ../node_modules/history/createHashHistory.js
-var createHashHistory = __webpack_require__("nqnI");
-var createHashHistory_default = /*#__PURE__*/__webpack_require__.n(createHashHistory);
+// CONCATENATED MODULE: ../node_modules/@babel/runtime/helpers/esm/extends.js
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+// CONCATENATED MODULE: ../node_modules/resolve-pathname/index.js
+function isAbsolute(pathname) {
+  return pathname.charAt(0) === '/';
+}
+
+// About 1.5x faster than the two-arg version of Array#splice()
+function spliceOne(list, index) {
+  for (var i = index, k = i + 1, n = list.length; k < n; i += 1, k += 1) {
+    list[i] = list[k];
+  }
+
+  list.pop();
+}
+
+// This implementation is based heavily on node's url.parse
+function resolvePathname(to) {
+  var from = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+
+  var toParts = to && to.split('/') || [];
+  var fromParts = from && from.split('/') || [];
+
+  var isToAbs = to && isAbsolute(to);
+  var isFromAbs = from && isAbsolute(from);
+  var mustEndAbs = isToAbs || isFromAbs;
+
+  if (to && isAbsolute(to)) {
+    // to is absolute
+    fromParts = toParts;
+  } else if (toParts.length) {
+    // to is relative, drop the filename
+    fromParts.pop();
+    fromParts = fromParts.concat(toParts);
+  }
+
+  if (!fromParts.length) return '/';
+
+  var hasTrailingSlash = void 0;
+  if (fromParts.length) {
+    var last = fromParts[fromParts.length - 1];
+    hasTrailingSlash = last === '.' || last === '..' || last === '';
+  } else {
+    hasTrailingSlash = false;
+  }
+
+  var up = 0;
+  for (var i = fromParts.length; i >= 0; i--) {
+    var part = fromParts[i];
+
+    if (part === '.') {
+      spliceOne(fromParts, i);
+    } else if (part === '..') {
+      spliceOne(fromParts, i);
+      up++;
+    } else if (up) {
+      spliceOne(fromParts, i);
+      up--;
+    }
+  }
+
+  if (!mustEndAbs) for (; up--; up) {
+    fromParts.unshift('..');
+  }if (mustEndAbs && fromParts[0] !== '' && (!fromParts[0] || !isAbsolute(fromParts[0]))) fromParts.unshift('');
+
+  var result = fromParts.join('/');
+
+  if (hasTrailingSlash && result.substr(-1) !== '/') result += '/';
+
+  return result;
+}
+
+/* harmony default export */ var resolve_pathname = (resolvePathname);
+// CONCATENATED MODULE: ../node_modules/value-equal/index.js
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+  return typeof obj;
+} : function (obj) {
+  return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+};
+
+function valueEqual(a, b) {
+  if (a === b) return true;
+
+  if (a == null || b == null) return false;
+
+  if (Array.isArray(a)) {
+    return Array.isArray(b) && a.length === b.length && a.every(function (item, index) {
+      return valueEqual(item, b[index]);
+    });
+  }
+
+  var aType = typeof a === 'undefined' ? 'undefined' : _typeof(a);
+  var bType = typeof b === 'undefined' ? 'undefined' : _typeof(b);
+
+  if (aType !== bType) return false;
+
+  if (aType === 'object') {
+    var aValue = a.valueOf();
+    var bValue = b.valueOf();
+
+    if (aValue !== a || bValue !== b) return valueEqual(aValue, bValue);
+
+    var aKeys = Object.keys(a);
+    var bKeys = Object.keys(b);
+
+    if (aKeys.length !== bKeys.length) return false;
+
+    return aKeys.every(function (key) {
+      return valueEqual(a[key], b[key]);
+    });
+  }
+
+  return false;
+}
+
+/* harmony default export */ var value_equal = (valueEqual);
+// CONCATENATED MODULE: ../node_modules/tiny-warning/dist/tiny-warning.esm.js
+var isProduction = "production" === 'production';
+function tiny_warning_esm_warning(condition, message) {
+  if (!isProduction) {
+    if (condition) {
+      return;
+    }
+
+    var text = "Warning: " + message;
+
+    if (typeof console !== 'undefined') {
+      console.warn(text);
+    }
+
+    try {
+      throw Error(text);
+    } catch (x) {}
+  }
+}
+
+/* harmony default export */ var tiny_warning_esm = (tiny_warning_esm_warning);
+// CONCATENATED MODULE: ../node_modules/tiny-invariant/dist/tiny-invariant.esm.js
+var tiny_invariant_esm_isProduction = "production" === 'production';
+var prefix = 'Invariant failed';
+function tiny_invariant_esm_invariant(condition, message) {
+  if (condition) {
+    return;
+  }
+
+  if (tiny_invariant_esm_isProduction) {
+    throw new Error(prefix);
+  } else {
+    throw new Error(prefix + ": " + (message || ''));
+  }
+}
+
+/* harmony default export */ var tiny_invariant_esm = (tiny_invariant_esm_invariant);
+// CONCATENATED MODULE: ../node_modules/history/esm/history.js
+
+
+
+
+
+
+function addLeadingSlash(path) {
+  return path.charAt(0) === '/' ? path : '/' + path;
+}
+function stripLeadingSlash(path) {
+  return path.charAt(0) === '/' ? path.substr(1) : path;
+}
+function hasBasename(path, prefix) {
+  return new RegExp('^' + prefix + '(\\/|\\?|#|$)', 'i').test(path);
+}
+function stripBasename(path, prefix) {
+  return hasBasename(path, prefix) ? path.substr(prefix.length) : path;
+}
+function stripTrailingSlash(path) {
+  return path.charAt(path.length - 1) === '/' ? path.slice(0, -1) : path;
+}
+function parsePath(path) {
+  var pathname = path || '/';
+  var search = '';
+  var hash = '';
+  var hashIndex = pathname.indexOf('#');
+
+  if (hashIndex !== -1) {
+    hash = pathname.substr(hashIndex);
+    pathname = pathname.substr(0, hashIndex);
+  }
+
+  var searchIndex = pathname.indexOf('?');
+
+  if (searchIndex !== -1) {
+    search = pathname.substr(searchIndex);
+    pathname = pathname.substr(0, searchIndex);
+  }
+
+  return {
+    pathname: pathname,
+    search: search === '?' ? '' : search,
+    hash: hash === '#' ? '' : hash
+  };
+}
+function createPath(location) {
+  var pathname = location.pathname,
+      search = location.search,
+      hash = location.hash;
+  var path = pathname || '/';
+  if (search && search !== '?') path += search.charAt(0) === '?' ? search : "?" + search;
+  if (hash && hash !== '#') path += hash.charAt(0) === '#' ? hash : "#" + hash;
+  return path;
+}
+
+function createLocation(path, state, key, currentLocation) {
+  var location;
+
+  if (typeof path === 'string') {
+    // Two-arg form: push(path, state)
+    location = parsePath(path);
+    location.state = state;
+  } else {
+    // One-arg form: push(location)
+    location = _extends({}, path);
+    if (location.pathname === undefined) location.pathname = '';
+
+    if (location.search) {
+      if (location.search.charAt(0) !== '?') location.search = '?' + location.search;
+    } else {
+      location.search = '';
+    }
+
+    if (location.hash) {
+      if (location.hash.charAt(0) !== '#') location.hash = '#' + location.hash;
+    } else {
+      location.hash = '';
+    }
+
+    if (state !== undefined && location.state === undefined) location.state = state;
+  }
+
+  try {
+    location.pathname = decodeURI(location.pathname);
+  } catch (e) {
+    if (e instanceof URIError) {
+      throw new URIError('Pathname "' + location.pathname + '" could not be decoded. ' + 'This is likely caused by an invalid percent-encoding.');
+    } else {
+      throw e;
+    }
+  }
+
+  if (key) location.key = key;
+
+  if (currentLocation) {
+    // Resolve incomplete/relative pathname relative to current location.
+    if (!location.pathname) {
+      location.pathname = currentLocation.pathname;
+    } else if (location.pathname.charAt(0) !== '/') {
+      location.pathname = resolve_pathname(location.pathname, currentLocation.pathname);
+    }
+  } else {
+    // When there is no prior location and pathname is empty, set it to /
+    if (!location.pathname) {
+      location.pathname = '/';
+    }
+  }
+
+  return location;
+}
+function locationsAreEqual(a, b) {
+  return a.pathname === b.pathname && a.search === b.search && a.hash === b.hash && a.key === b.key && value_equal(a.state, b.state);
+}
+
+function createTransitionManager() {
+  var prompt = null;
+
+  function setPrompt(nextPrompt) {
+     false ? warning(prompt == null, 'A history supports only one prompt at a time') : void 0;
+    prompt = nextPrompt;
+    return function () {
+      if (prompt === nextPrompt) prompt = null;
+    };
+  }
+
+  function confirmTransitionTo(location, action, getUserConfirmation, callback) {
+    // TODO: If another transition starts while we're still confirming
+    // the previous one, we may end up in a weird state. Figure out the
+    // best way to handle this.
+    if (prompt != null) {
+      var result = typeof prompt === 'function' ? prompt(location, action) : prompt;
+
+      if (typeof result === 'string') {
+        if (typeof getUserConfirmation === 'function') {
+          getUserConfirmation(result, callback);
+        } else {
+           false ? warning(false, 'A history needs a getUserConfirmation function in order to use a prompt message') : void 0;
+          callback(true);
+        }
+      } else {
+        // Return false from a transition hook to cancel the transition.
+        callback(result !== false);
+      }
+    } else {
+      callback(true);
+    }
+  }
+
+  var listeners = [];
+
+  function appendListener(fn) {
+    var isActive = true;
+
+    function listener() {
+      if (isActive) fn.apply(void 0, arguments);
+    }
+
+    listeners.push(listener);
+    return function () {
+      isActive = false;
+      listeners = listeners.filter(function (item) {
+        return item !== listener;
+      });
+    };
+  }
+
+  function notifyListeners() {
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    listeners.forEach(function (listener) {
+      return listener.apply(void 0, args);
+    });
+  }
+
+  return {
+    setPrompt: setPrompt,
+    confirmTransitionTo: confirmTransitionTo,
+    appendListener: appendListener,
+    notifyListeners: notifyListeners
+  };
+}
+
+var canUseDOM = !!(typeof window !== 'undefined' && window.document && window.document.createElement);
+function getConfirmation(message, callback) {
+  callback(window.confirm(message)); // eslint-disable-line no-alert
+}
+/**
+ * Returns true if the HTML5 history API is supported. Taken from Modernizr.
+ *
+ * https://github.com/Modernizr/Modernizr/blob/master/LICENSE
+ * https://github.com/Modernizr/Modernizr/blob/master/feature-detects/history.js
+ * changed to avoid false negatives for Windows Phones: https://github.com/reactjs/react-router/issues/586
+ */
+
+function supportsHistory() {
+  var ua = window.navigator.userAgent;
+  if ((ua.indexOf('Android 2.') !== -1 || ua.indexOf('Android 4.0') !== -1) && ua.indexOf('Mobile Safari') !== -1 && ua.indexOf('Chrome') === -1 && ua.indexOf('Windows Phone') === -1) return false;
+  return window.history && 'pushState' in window.history;
+}
+/**
+ * Returns true if browser fires popstate on hash change.
+ * IE10 and IE11 do not.
+ */
+
+function supportsPopStateOnHashChange() {
+  return window.navigator.userAgent.indexOf('Trident') === -1;
+}
+/**
+ * Returns false if using go(n) with hash history causes a full page reload.
+ */
+
+function supportsGoWithoutReloadUsingHash() {
+  return window.navigator.userAgent.indexOf('Firefox') === -1;
+}
+/**
+ * Returns true if a given popstate event is an extraneous WebKit event.
+ * Accounts for the fact that Chrome on iOS fires real popstate events
+ * containing undefined state when pressing the back button.
+ */
+
+function isExtraneousPopstateEvent(event) {
+  event.state === undefined && navigator.userAgent.indexOf('CriOS') === -1;
+}
+
+var PopStateEvent = 'popstate';
+var HashChangeEvent = 'hashchange';
+
+function getHistoryState() {
+  try {
+    return window.history.state || {};
+  } catch (e) {
+    // IE 11 sometimes throws when accessing window.history.state
+    // See https://github.com/ReactTraining/history/pull/289
+    return {};
+  }
+}
+/**
+ * Creates a history object that uses the HTML5 history API including
+ * pushState, replaceState, and the popstate event.
+ */
+
+function createBrowserHistory(props) {
+  if (props === void 0) {
+    props = {};
+  }
+
+  !canUseDOM ?  false ? invariant(false, 'Browser history needs a DOM') : tiny_invariant_esm(false) : void 0;
+  var globalHistory = window.history;
+  var canUseHistory = supportsHistory();
+  var needsHashChangeListener = !supportsPopStateOnHashChange();
+  var _props = props,
+      _props$forceRefresh = _props.forceRefresh,
+      forceRefresh = _props$forceRefresh === void 0 ? false : _props$forceRefresh,
+      _props$getUserConfirm = _props.getUserConfirmation,
+      getUserConfirmation = _props$getUserConfirm === void 0 ? getConfirmation : _props$getUserConfirm,
+      _props$keyLength = _props.keyLength,
+      keyLength = _props$keyLength === void 0 ? 6 : _props$keyLength;
+  var basename = props.basename ? stripTrailingSlash(addLeadingSlash(props.basename)) : '';
+
+  function getDOMLocation(historyState) {
+    var _ref = historyState || {},
+        key = _ref.key,
+        state = _ref.state;
+
+    var _window$location = window.location,
+        pathname = _window$location.pathname,
+        search = _window$location.search,
+        hash = _window$location.hash;
+    var path = pathname + search + hash;
+     false ? warning(!basename || hasBasename(path, basename), 'You are attempting to use a basename on a page whose URL path does not begin ' + 'with the basename. Expected path "' + path + '" to begin with "' + basename + '".') : void 0;
+    if (basename) path = stripBasename(path, basename);
+    return createLocation(path, state, key);
+  }
+
+  function createKey() {
+    return Math.random().toString(36).substr(2, keyLength);
+  }
+
+  var transitionManager = createTransitionManager();
+
+  function setState(nextState) {
+    _extends(history, nextState);
+
+    history.length = globalHistory.length;
+    transitionManager.notifyListeners(history.location, history.action);
+  }
+
+  function handlePopState(event) {
+    // Ignore extraneous popstate events in WebKit.
+    if (isExtraneousPopstateEvent(event)) return;
+    handlePop(getDOMLocation(event.state));
+  }
+
+  function handleHashChange() {
+    handlePop(getDOMLocation(getHistoryState()));
+  }
+
+  var forceNextPop = false;
+
+  function handlePop(location) {
+    if (forceNextPop) {
+      forceNextPop = false;
+      setState();
+    } else {
+      var action = 'POP';
+      transitionManager.confirmTransitionTo(location, action, getUserConfirmation, function (ok) {
+        if (ok) {
+          setState({
+            action: action,
+            location: location
+          });
+        } else {
+          revertPop(location);
+        }
+      });
+    }
+  }
+
+  function revertPop(fromLocation) {
+    var toLocation = history.location; // TODO: We could probably make this more reliable by
+    // keeping a list of keys we've seen in sessionStorage.
+    // Instead, we just default to 0 for keys we don't know.
+
+    var toIndex = allKeys.indexOf(toLocation.key);
+    if (toIndex === -1) toIndex = 0;
+    var fromIndex = allKeys.indexOf(fromLocation.key);
+    if (fromIndex === -1) fromIndex = 0;
+    var delta = toIndex - fromIndex;
+
+    if (delta) {
+      forceNextPop = true;
+      go(delta);
+    }
+  }
+
+  var initialLocation = getDOMLocation(getHistoryState());
+  var allKeys = [initialLocation.key]; // Public interface
+
+  function createHref(location) {
+    return basename + createPath(location);
+  }
+
+  function push(path, state) {
+     false ? warning(!(typeof path === 'object' && path.state !== undefined && state !== undefined), 'You should avoid providing a 2nd state argument to push when the 1st ' + 'argument is a location-like object that already has state; it is ignored') : void 0;
+    var action = 'PUSH';
+    var location = createLocation(path, state, createKey(), history.location);
+    transitionManager.confirmTransitionTo(location, action, getUserConfirmation, function (ok) {
+      if (!ok) return;
+      var href = createHref(location);
+      var key = location.key,
+          state = location.state;
+
+      if (canUseHistory) {
+        globalHistory.pushState({
+          key: key,
+          state: state
+        }, null, href);
+
+        if (forceRefresh) {
+          window.location.href = href;
+        } else {
+          var prevIndex = allKeys.indexOf(history.location.key);
+          var nextKeys = allKeys.slice(0, prevIndex === -1 ? 0 : prevIndex + 1);
+          nextKeys.push(location.key);
+          allKeys = nextKeys;
+          setState({
+            action: action,
+            location: location
+          });
+        }
+      } else {
+         false ? warning(state === undefined, 'Browser history cannot push state in browsers that do not support HTML5 history') : void 0;
+        window.location.href = href;
+      }
+    });
+  }
+
+  function replace(path, state) {
+     false ? warning(!(typeof path === 'object' && path.state !== undefined && state !== undefined), 'You should avoid providing a 2nd state argument to replace when the 1st ' + 'argument is a location-like object that already has state; it is ignored') : void 0;
+    var action = 'REPLACE';
+    var location = createLocation(path, state, createKey(), history.location);
+    transitionManager.confirmTransitionTo(location, action, getUserConfirmation, function (ok) {
+      if (!ok) return;
+      var href = createHref(location);
+      var key = location.key,
+          state = location.state;
+
+      if (canUseHistory) {
+        globalHistory.replaceState({
+          key: key,
+          state: state
+        }, null, href);
+
+        if (forceRefresh) {
+          window.location.replace(href);
+        } else {
+          var prevIndex = allKeys.indexOf(history.location.key);
+          if (prevIndex !== -1) allKeys[prevIndex] = location.key;
+          setState({
+            action: action,
+            location: location
+          });
+        }
+      } else {
+         false ? warning(state === undefined, 'Browser history cannot replace state in browsers that do not support HTML5 history') : void 0;
+        window.location.replace(href);
+      }
+    });
+  }
+
+  function go(n) {
+    globalHistory.go(n);
+  }
+
+  function goBack() {
+    go(-1);
+  }
+
+  function goForward() {
+    go(1);
+  }
+
+  var listenerCount = 0;
+
+  function checkDOMListeners(delta) {
+    listenerCount += delta;
+
+    if (listenerCount === 1 && delta === 1) {
+      window.addEventListener(PopStateEvent, handlePopState);
+      if (needsHashChangeListener) window.addEventListener(HashChangeEvent, handleHashChange);
+    } else if (listenerCount === 0) {
+      window.removeEventListener(PopStateEvent, handlePopState);
+      if (needsHashChangeListener) window.removeEventListener(HashChangeEvent, handleHashChange);
+    }
+  }
+
+  var isBlocked = false;
+
+  function block(prompt) {
+    if (prompt === void 0) {
+      prompt = false;
+    }
+
+    var unblock = transitionManager.setPrompt(prompt);
+
+    if (!isBlocked) {
+      checkDOMListeners(1);
+      isBlocked = true;
+    }
+
+    return function () {
+      if (isBlocked) {
+        isBlocked = false;
+        checkDOMListeners(-1);
+      }
+
+      return unblock();
+    };
+  }
+
+  function listen(listener) {
+    var unlisten = transitionManager.appendListener(listener);
+    checkDOMListeners(1);
+    return function () {
+      checkDOMListeners(-1);
+      unlisten();
+    };
+  }
+
+  var history = {
+    length: globalHistory.length,
+    action: 'POP',
+    location: initialLocation,
+    createHref: createHref,
+    push: push,
+    replace: replace,
+    go: go,
+    goBack: goBack,
+    goForward: goForward,
+    block: block,
+    listen: listen
+  };
+  return history;
+}
+
+var HashChangeEvent$1 = 'hashchange';
+var HashPathCoders = {
+  hashbang: {
+    encodePath: function encodePath(path) {
+      return path.charAt(0) === '!' ? path : '!/' + stripLeadingSlash(path);
+    },
+    decodePath: function decodePath(path) {
+      return path.charAt(0) === '!' ? path.substr(1) : path;
+    }
+  },
+  noslash: {
+    encodePath: stripLeadingSlash,
+    decodePath: addLeadingSlash
+  },
+  slash: {
+    encodePath: addLeadingSlash,
+    decodePath: addLeadingSlash
+  }
+};
+
+function getHashPath() {
+  // We can't use window.location.hash here because it's not
+  // consistent across browsers - Firefox will pre-decode it!
+  var href = window.location.href;
+  var hashIndex = href.indexOf('#');
+  return hashIndex === -1 ? '' : href.substring(hashIndex + 1);
+}
+
+function pushHashPath(path) {
+  window.location.hash = path;
+}
+
+function replaceHashPath(path) {
+  var hashIndex = window.location.href.indexOf('#');
+  window.location.replace(window.location.href.slice(0, hashIndex >= 0 ? hashIndex : 0) + '#' + path);
+}
+
+function createHashHistory(props) {
+  if (props === void 0) {
+    props = {};
+  }
+
+  !canUseDOM ?  false ? invariant(false, 'Hash history needs a DOM') : tiny_invariant_esm(false) : void 0;
+  var globalHistory = window.history;
+  var canGoWithoutReload = supportsGoWithoutReloadUsingHash();
+  var _props = props,
+      _props$getUserConfirm = _props.getUserConfirmation,
+      getUserConfirmation = _props$getUserConfirm === void 0 ? getConfirmation : _props$getUserConfirm,
+      _props$hashType = _props.hashType,
+      hashType = _props$hashType === void 0 ? 'slash' : _props$hashType;
+  var basename = props.basename ? stripTrailingSlash(addLeadingSlash(props.basename)) : '';
+  var _HashPathCoders$hashT = HashPathCoders[hashType],
+      encodePath = _HashPathCoders$hashT.encodePath,
+      decodePath = _HashPathCoders$hashT.decodePath;
+
+  function getDOMLocation() {
+    var path = decodePath(getHashPath());
+     false ? warning(!basename || hasBasename(path, basename), 'You are attempting to use a basename on a page whose URL path does not begin ' + 'with the basename. Expected path "' + path + '" to begin with "' + basename + '".') : void 0;
+    if (basename) path = stripBasename(path, basename);
+    return createLocation(path);
+  }
+
+  var transitionManager = createTransitionManager();
+
+  function setState(nextState) {
+    _extends(history, nextState);
+
+    history.length = globalHistory.length;
+    transitionManager.notifyListeners(history.location, history.action);
+  }
+
+  var forceNextPop = false;
+  var ignorePath = null;
+
+  function handleHashChange() {
+    var path = getHashPath();
+    var encodedPath = encodePath(path);
+
+    if (path !== encodedPath) {
+      // Ensure we always have a properly-encoded hash.
+      replaceHashPath(encodedPath);
+    } else {
+      var location = getDOMLocation();
+      var prevLocation = history.location;
+      if (!forceNextPop && locationsAreEqual(prevLocation, location)) return; // A hashchange doesn't always == location change.
+
+      if (ignorePath === createPath(location)) return; // Ignore this change; we already setState in push/replace.
+
+      ignorePath = null;
+      handlePop(location);
+    }
+  }
+
+  function handlePop(location) {
+    if (forceNextPop) {
+      forceNextPop = false;
+      setState();
+    } else {
+      var action = 'POP';
+      transitionManager.confirmTransitionTo(location, action, getUserConfirmation, function (ok) {
+        if (ok) {
+          setState({
+            action: action,
+            location: location
+          });
+        } else {
+          revertPop(location);
+        }
+      });
+    }
+  }
+
+  function revertPop(fromLocation) {
+    var toLocation = history.location; // TODO: We could probably make this more reliable by
+    // keeping a list of paths we've seen in sessionStorage.
+    // Instead, we just default to 0 for paths we don't know.
+
+    var toIndex = allPaths.lastIndexOf(createPath(toLocation));
+    if (toIndex === -1) toIndex = 0;
+    var fromIndex = allPaths.lastIndexOf(createPath(fromLocation));
+    if (fromIndex === -1) fromIndex = 0;
+    var delta = toIndex - fromIndex;
+
+    if (delta) {
+      forceNextPop = true;
+      go(delta);
+    }
+  } // Ensure the hash is encoded properly before doing anything else.
+
+
+  var path = getHashPath();
+  var encodedPath = encodePath(path);
+  if (path !== encodedPath) replaceHashPath(encodedPath);
+  var initialLocation = getDOMLocation();
+  var allPaths = [createPath(initialLocation)]; // Public interface
+
+  function createHref(location) {
+    return '#' + encodePath(basename + createPath(location));
+  }
+
+  function push(path, state) {
+     false ? warning(state === undefined, 'Hash history cannot push state; it is ignored') : void 0;
+    var action = 'PUSH';
+    var location = createLocation(path, undefined, undefined, history.location);
+    transitionManager.confirmTransitionTo(location, action, getUserConfirmation, function (ok) {
+      if (!ok) return;
+      var path = createPath(location);
+      var encodedPath = encodePath(basename + path);
+      var hashChanged = getHashPath() !== encodedPath;
+
+      if (hashChanged) {
+        // We cannot tell if a hashchange was caused by a PUSH, so we'd
+        // rather setState here and ignore the hashchange. The caveat here
+        // is that other hash histories in the page will consider it a POP.
+        ignorePath = path;
+        pushHashPath(encodedPath);
+        var prevIndex = allPaths.lastIndexOf(createPath(history.location));
+        var nextPaths = allPaths.slice(0, prevIndex === -1 ? 0 : prevIndex + 1);
+        nextPaths.push(path);
+        allPaths = nextPaths;
+        setState({
+          action: action,
+          location: location
+        });
+      } else {
+         false ? warning(false, 'Hash history cannot PUSH the same path; a new entry will not be added to the history stack') : void 0;
+        setState();
+      }
+    });
+  }
+
+  function replace(path, state) {
+     false ? warning(state === undefined, 'Hash history cannot replace state; it is ignored') : void 0;
+    var action = 'REPLACE';
+    var location = createLocation(path, undefined, undefined, history.location);
+    transitionManager.confirmTransitionTo(location, action, getUserConfirmation, function (ok) {
+      if (!ok) return;
+      var path = createPath(location);
+      var encodedPath = encodePath(basename + path);
+      var hashChanged = getHashPath() !== encodedPath;
+
+      if (hashChanged) {
+        // We cannot tell if a hashchange was caused by a REPLACE, so we'd
+        // rather setState here and ignore the hashchange. The caveat here
+        // is that other hash histories in the page will consider it a POP.
+        ignorePath = path;
+        replaceHashPath(encodedPath);
+      }
+
+      var prevIndex = allPaths.indexOf(createPath(history.location));
+      if (prevIndex !== -1) allPaths[prevIndex] = path;
+      setState({
+        action: action,
+        location: location
+      });
+    });
+  }
+
+  function go(n) {
+     false ? warning(canGoWithoutReload, 'Hash history go(n) causes a full page reload in this browser') : void 0;
+    globalHistory.go(n);
+  }
+
+  function goBack() {
+    go(-1);
+  }
+
+  function goForward() {
+    go(1);
+  }
+
+  var listenerCount = 0;
+
+  function checkDOMListeners(delta) {
+    listenerCount += delta;
+
+    if (listenerCount === 1 && delta === 1) {
+      window.addEventListener(HashChangeEvent$1, handleHashChange);
+    } else if (listenerCount === 0) {
+      window.removeEventListener(HashChangeEvent$1, handleHashChange);
+    }
+  }
+
+  var isBlocked = false;
+
+  function block(prompt) {
+    if (prompt === void 0) {
+      prompt = false;
+    }
+
+    var unblock = transitionManager.setPrompt(prompt);
+
+    if (!isBlocked) {
+      checkDOMListeners(1);
+      isBlocked = true;
+    }
+
+    return function () {
+      if (isBlocked) {
+        isBlocked = false;
+        checkDOMListeners(-1);
+      }
+
+      return unblock();
+    };
+  }
+
+  function listen(listener) {
+    var unlisten = transitionManager.appendListener(listener);
+    checkDOMListeners(1);
+    return function () {
+      checkDOMListeners(-1);
+      unlisten();
+    };
+  }
+
+  var history = {
+    length: globalHistory.length,
+    action: 'POP',
+    location: initialLocation,
+    createHref: createHref,
+    push: push,
+    replace: replace,
+    go: go,
+    goBack: goBack,
+    goForward: goForward,
+    block: block,
+    listen: listen
+  };
+  return history;
+}
+
+function clamp(n, lowerBound, upperBound) {
+  return Math.min(Math.max(n, lowerBound), upperBound);
+}
+/**
+ * Creates a history object that stores locations in memory.
+ */
+
+function createMemoryHistory(props) {
+  if (props === void 0) {
+    props = {};
+  }
+
+  var _props = props,
+      getUserConfirmation = _props.getUserConfirmation,
+      _props$initialEntries = _props.initialEntries,
+      initialEntries = _props$initialEntries === void 0 ? ['/'] : _props$initialEntries,
+      _props$initialIndex = _props.initialIndex,
+      initialIndex = _props$initialIndex === void 0 ? 0 : _props$initialIndex,
+      _props$keyLength = _props.keyLength,
+      keyLength = _props$keyLength === void 0 ? 6 : _props$keyLength;
+  var transitionManager = createTransitionManager();
+
+  function setState(nextState) {
+    _extends(history, nextState);
+
+    history.length = history.entries.length;
+    transitionManager.notifyListeners(history.location, history.action);
+  }
+
+  function createKey() {
+    return Math.random().toString(36).substr(2, keyLength);
+  }
+
+  var index = clamp(initialIndex, 0, initialEntries.length - 1);
+  var entries = initialEntries.map(function (entry) {
+    return typeof entry === 'string' ? createLocation(entry, undefined, createKey()) : createLocation(entry, undefined, entry.key || createKey());
+  }); // Public interface
+
+  var createHref = createPath;
+
+  function push(path, state) {
+     false ? warning(!(typeof path === 'object' && path.state !== undefined && state !== undefined), 'You should avoid providing a 2nd state argument to push when the 1st ' + 'argument is a location-like object that already has state; it is ignored') : void 0;
+    var action = 'PUSH';
+    var location = createLocation(path, state, createKey(), history.location);
+    transitionManager.confirmTransitionTo(location, action, getUserConfirmation, function (ok) {
+      if (!ok) return;
+      var prevIndex = history.index;
+      var nextIndex = prevIndex + 1;
+      var nextEntries = history.entries.slice(0);
+
+      if (nextEntries.length > nextIndex) {
+        nextEntries.splice(nextIndex, nextEntries.length - nextIndex, location);
+      } else {
+        nextEntries.push(location);
+      }
+
+      setState({
+        action: action,
+        location: location,
+        index: nextIndex,
+        entries: nextEntries
+      });
+    });
+  }
+
+  function replace(path, state) {
+     false ? warning(!(typeof path === 'object' && path.state !== undefined && state !== undefined), 'You should avoid providing a 2nd state argument to replace when the 1st ' + 'argument is a location-like object that already has state; it is ignored') : void 0;
+    var action = 'REPLACE';
+    var location = createLocation(path, state, createKey(), history.location);
+    transitionManager.confirmTransitionTo(location, action, getUserConfirmation, function (ok) {
+      if (!ok) return;
+      history.entries[history.index] = location;
+      setState({
+        action: action,
+        location: location
+      });
+    });
+  }
+
+  function go(n) {
+    var nextIndex = clamp(history.index + n, 0, history.entries.length - 1);
+    var action = 'POP';
+    var location = history.entries[nextIndex];
+    transitionManager.confirmTransitionTo(location, action, getUserConfirmation, function (ok) {
+      if (ok) {
+        setState({
+          action: action,
+          location: location,
+          index: nextIndex
+        });
+      } else {
+        // Mimic the behavior of DOM histories by
+        // causing a render after a cancelled POP.
+        setState();
+      }
+    });
+  }
+
+  function goBack() {
+    go(-1);
+  }
+
+  function goForward() {
+    go(1);
+  }
+
+  function canGo(n) {
+    var nextIndex = history.index + n;
+    return nextIndex >= 0 && nextIndex < history.entries.length;
+  }
+
+  function block(prompt) {
+    if (prompt === void 0) {
+      prompt = false;
+    }
+
+    return transitionManager.setPrompt(prompt);
+  }
+
+  function listen(listener) {
+    return transitionManager.appendListener(listener);
+  }
+
+  var history = {
+    length: entries.length,
+    action: 'POP',
+    location: entries[index],
+    index: index,
+    entries: entries,
+    createHref: createHref,
+    push: push,
+    replace: replace,
+    go: go,
+    goBack: goBack,
+    goForward: goForward,
+    canGo: canGo,
+    block: block,
+    listen: listen
+  };
+  return history;
+}
+
+
+// EXTERNAL MODULE: ../node_modules/normalize.css/normalize.css
+var normalize = __webpack_require__("DOAq");
+var normalize_default = /*#__PURE__*/__webpack_require__.n(normalize);
+
+// EXTERNAL MODULE: ../node_modules/concrete.css/concrete.css
+var concrete = __webpack_require__("EZGJ");
+var concrete_default = /*#__PURE__*/__webpack_require__.n(concrete);
+
+// EXTERNAL MODULE: ./style.css
+var style = __webpack_require__("FWi5");
+var style_default = /*#__PURE__*/__webpack_require__.n(style);
 
 // CONCATENATED MODULE: ./index.js
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return index_App; });
@@ -2199,114 +3056,117 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
+
+
 var USERNAME = 'louismerlin';
 var BLOG_NAME = 'blissue';
 
-var index__ref2 = Object(preact_min["h"])('script', { async: true, src: 'https://www.googletagmanager.com/gtag/js?id=UA-105326072-5' });
+var index__ref2 = Object(preact_min["h"])('link', { href: 'https://fonts.googleapis.com/css?family=Chivo:400,700', rel: 'stylesheet' });
 
 var _ref3 = Object(preact_min["h"])(
-	'div',
-	null,
-	Object(preact_min["h"])(
-		'h1',
-		{ className: 'has-text-centered is-blog-title' },
-		'LOADING....'
-	)
+  'div',
+  { className: 'container blog-title' },
+  Object(preact_min["h"])(
+    'h1',
+    null,
+    'LOADING....'
+  )
 );
 
 var index_App = function (_Component) {
-	_inherits(App, _Component);
+  _inherits(App, _Component);
 
-	function App() {
-		var _temp, _this, _ret;
+  function App(props) {
+    _classCallCheck(this, App);
 
-		_classCallCheck(this, App);
+    var _this = _possibleConstructorReturn(this, _Component.call(this, props));
 
-		for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-			args[_key] = arguments[_key];
-		}
+    _this.state = {
+      posts: [],
+      author: {}
+    };
+    return _this;
+  }
 
-		return _ret = (_temp = (_this = _possibleConstructorReturn(this, _Component.call.apply(_Component, [this].concat(args))), _this), _this.state = {
-			posts: [],
-			author: {}
-		}, _temp), _possibleConstructorReturn(_this, _ret);
-	}
+  App.prototype.componentDidMount = function componentDidMount() {
+    var _this2 = this;
 
-	App.prototype.componentDidMount = function componentDidMount() {
-		var _this2 = this;
+    ga();
+    req('https://api.github.com/repos/' + USERNAME + '/' + BLOG_NAME + '/issues?labels=post', {
+      Accept: 'application/vnd.github.squirrel-girl-preview'
+    }).then(function (issues) {
+      _this2.setState({
+        posts: issues.filter(function (i) {
+          return i.author_association === 'OWNER';
+        }).map(function (i) {
+          return {
+            id: i.id,
+            body: function body() {
+              return Object(preact_min["h"])(preact_markdown_default.a, { markdown: i.body });
+            },
+            title: i.title,
+            created_at: new Date(i.created_at),
+            reactions: i.reactions,
+            url: i.html_url,
+            comments: i.comments
+          };
+        })
+      });
+    });
+    req('https://api.github.com/users/' + USERNAME).then(function (user) {
+      _this2.setState({
+        author: {
+          login: user.login,
+          url: user.html_url,
+          name: user.name || '',
+          blog: user.blog || '',
+          location: user.location || '',
+          bio: user.bio || ''
+        }
+      });
+    });
+  };
 
-		ga();
-		req('https://api.github.com/repos/' + USERNAME + '/' + BLOG_NAME + '/issues?labels=post', {
-			Accept: 'application/vnd.github.squirrel-girl-preview'
-		}).then(function (issues) {
-			_this2.setState({
-				posts: issues.filter(function (i) {
-					return i.author_association === 'OWNER';
-				}).map(function (i) {
-					return {
-						id: i.id,
-						body: function body() {
-							return Object(preact_min["h"])(preact_markdown_default.a, { markdown: i.body });
-						},
-						title: i.title,
-						created_at: new Date(i.created_at),
-						reactions: i.reactions,
-						url: i.html_url,
-						comments: i.comments
-					};
-				})
-			});
-		});
-		req('https://api.github.com/users/' + USERNAME).then(function (user) {
-			_this2.setState({
-				author: {
-					login: user.login,
-					url: user.html_url,
-					name: user.name || '',
-					blog: user.blog || '',
-					location: user.location || '',
-					bio: user.bio || ''
-				}
-			});
-		});
-	};
+  App.prototype.render = function render(_, _ref) {
+    var posts = _ref.posts,
+        author = _ref.author;
 
-	App.prototype.render = function render(_, _ref) {
-		var posts = _ref.posts,
-		    author = _ref.author;
+    if (posts.length && author !== {}) {
+      return Object(preact_min["h"])(
+        'div',
+        null,
+        index__ref2,
+        Object(preact_min["h"])(
+          'header',
+          { className: 'container blog-title' },
+          Object(preact_min["h"])(
+            'h1',
+            null,
+            Object(preact_min["h"])(
+              'a',
+              { href: '/' },
+              author.login + '\'',
+              's blog'
+            )
+          )
+        ),
+        Object(preact_min["h"])(
+          'main',
+          { className: 'container' },
+          Object(preact_min["h"])(
+            preact_router_es_Router,
+            { history: createHashHistory() },
+            Object(preact_min["h"])(home, { path: '/', posts: posts }),
+            Object(preact_min["h"])(post_0, { path: '/:postId', posts: posts })
+          ),
+          Object(preact_min["h"])(footer, { author: author })
+        )
+      );
+    }
+    return _ref3;
+  };
 
-		if (posts.length && author !== {}) {
-			return Object(preact_min["h"])(
-				'div',
-				null,
-				index__ref2,
-				Object(preact_min["h"])(
-					'h1',
-					{ className: 'has-text-centered is-blog-title' },
-					Object(preact_min["h"])(
-						'a',
-						{ href: '/' },
-						author.login + '\'',
-						's blog'
-					)
-				),
-				Object(preact_min["h"])(
-					'main',
-					null,
-					Object(preact_min["h"])(
-						preact_router_es_Router,
-						{ history: createHashHistory_default()() },
-						Object(preact_min["h"])(home, { path: '/', posts: posts }),
-						Object(preact_min["h"])(post_0, { path: '/:postId', posts: posts })
-					),
-					Object(preact_min["h"])(footer, { author: author })
-				)
-			);
-		}
-		return _ref3;
-	};
-
-	return App;
+  return App;
 }(preact_min["Component"]);
 
 
@@ -2323,249 +3183,197 @@ var index_App = function (_Component) {
         o,
         r,
         i,
-        l = M;for (i = arguments.length; i-- > 2;) {
-      T.push(arguments[i]);
-    }t && null != t.children && (T.length || T.push(t.children), delete t.children);while (T.length) {
-      if ((o = T.pop()) && void 0 !== o.pop) for (i = o.length; i--;) {
-        T.push(o[i]);
-      } else "boolean" == typeof o && (o = null), (r = "function" != typeof e) && (null == o ? o = "" : "number" == typeof o ? o += "" : "string" != typeof o && (r = !1)), r && n ? l[l.length - 1] += o : l === M ? l = [o] : l.push(o), n = r;
-    }var a = new S();return a.nodeName = e, a.children = l, a.attributes = null == t ? void 0 : t, a.key = null == t ? void 0 : t.key, void 0 !== L.vnode && L.vnode(a), a;
+        l = W;for (i = arguments.length; i-- > 2;) {
+      P.push(arguments[i]);
+    }t && null != t.children && (P.length || P.push(t.children), delete t.children);while (P.length) {
+      if ((o = P.pop()) && void 0 !== o.pop) for (i = o.length; i--;) {
+        P.push(o[i]);
+      } else "boolean" == typeof o && (o = null), (r = "function" != typeof e) && (null == o ? o = "" : "number" == typeof o ? o += "" : "string" != typeof o && (r = !1)), r && n ? l[l.length - 1] += o : l === W ? l = [o] : l.push(o), n = r;
+    }var a = new T();return a.nodeName = e, a.children = l, a.attributes = null == t ? void 0 : t, a.key = null == t ? void 0 : t.key, void 0 !== M.vnode && M.vnode(a), a;
   }function t(e, t) {
     for (var n in t) {
       e[n] = t[n];
     }return e;
-  }function n(n, o) {
+  }function n(e, t) {
+    null != e && ("function" == typeof e ? e(t) : e.current = t);
+  }function o(n, o) {
     return e(n.nodeName, t(t({}, n.attributes), o), arguments.length > 2 ? [].slice.call(arguments, 2) : n.children);
-  }function o(e) {
-    !e.__d && (e.__d = !0) && 1 == D.push(e) && (L.debounceRendering || P)(r);
-  }function r() {
-    var e,
-        t = D;D = [];while (e = t.pop()) {
-      e.__d && C(e);
+  }function r(e) {
+    !e.__d && (e.__d = !0) && 1 == V.push(e) && (M.debounceRendering || D)(i);
+  }function i() {
+    var e;while (e = V.pop()) {
+      e.__d && x(e);
     }
-  }function i(e, t, n) {
-    return "string" == typeof t || "number" == typeof t ? void 0 !== e.splitText : "string" == typeof t.nodeName ? !e._componentConstructor && l(e, t.nodeName) : n || e._componentConstructor === t.nodeName;
-  }function l(e, t) {
+  }function l(e, t, n) {
+    return "string" == typeof t || "number" == typeof t ? void 0 !== e.splitText : "string" == typeof t.nodeName ? !e._componentConstructor && a(e, t.nodeName) : n || e._componentConstructor === t.nodeName;
+  }function a(e, t) {
     return e.__n === t || e.nodeName.toLowerCase() === t.toLowerCase();
-  }function a(e) {
+  }function u(e) {
     var n = t({}, e.attributes);n.children = e.children;var o = e.nodeName.defaultProps;if (void 0 !== o) for (var r in o) {
       void 0 === n[r] && (n[r] = o[r]);
     }return n;
-  }function p(e, t) {
+  }function c(e, t) {
     var n = t ? document.createElementNS("http://www.w3.org/2000/svg", e) : document.createElement(e);return n.__n = e, n;
-  }function u(e) {
+  }function p(e) {
     var t = e.parentNode;t && t.removeChild(e);
-  }function c(e, t, n, o, r) {
-    if ("className" === t && (t = "class"), "key" === t) ;else if ("ref" === t) n && n(null), o && o(e);else if ("class" !== t || r) {
+  }function s(e, t, o, r, i) {
+    if ("className" === t && (t = "class"), "key" === t) ;else if ("ref" === t) n(o, null), n(r, e);else if ("class" !== t || i) {
       if ("style" === t) {
-        if (o && "string" != typeof o && "string" != typeof n || (e.style.cssText = o || ""), o && "object" == typeof o) {
-          if ("string" != typeof n) for (var i in n) {
-            i in o || (e.style[i] = "");
-          }for (var i in o) {
-            e.style[i] = "number" == typeof o[i] && !1 === W.test(i) ? o[i] + "px" : o[i];
+        if (r && "string" != typeof r && "string" != typeof o || (e.style.cssText = r || ""), r && "object" == typeof r) {
+          if ("string" != typeof o) for (var l in o) {
+            l in r || (e.style[l] = "");
+          }for (var l in r) {
+            e.style[l] = "number" == typeof r[l] && !1 === E.test(l) ? r[l] + "px" : r[l];
           }
         }
-      } else if ("dangerouslySetInnerHTML" === t) o && (e.innerHTML = o.__html || "");else if ("o" == t[0] && "n" == t[1]) {
-        var l = t !== (t = t.replace(/Capture$/, ""));t = t.toLowerCase().substring(2), o ? n || e.addEventListener(t, s, l) : e.removeEventListener(t, s, l), (e.__l || (e.__l = {}))[t] = o;
-      } else if ("list" !== t && "type" !== t && !r && t in e) {
+      } else if ("dangerouslySetInnerHTML" === t) r && (e.innerHTML = r.__html || "");else if ("o" == t[0] && "n" == t[1]) {
+        var a = t !== (t = t.replace(/Capture$/, ""));t = t.toLowerCase().substring(2), r ? o || e.addEventListener(t, _, a) : e.removeEventListener(t, _, a), (e.__l || (e.__l = {}))[t] = r;
+      } else if ("list" !== t && "type" !== t && !i && t in e) {
         try {
-          e[t] = null == o ? "" : o;
-        } catch (e) {}null != o && !1 !== o || "spellcheck" == t || e.removeAttribute(t);
+          e[t] = null == r ? "" : r;
+        } catch (e) {}null != r && !1 !== r || "spellcheck" == t || e.removeAttribute(t);
       } else {
-        var a = r && t !== (t = t.replace(/^xlink:?/, ""));null == o || !1 === o ? a ? e.removeAttributeNS("http://www.w3.org/1999/xlink", t.toLowerCase()) : e.removeAttribute(t) : "function" != typeof o && (a ? e.setAttributeNS("http://www.w3.org/1999/xlink", t.toLowerCase(), o) : e.setAttribute(t, o));
+        var u = i && t !== (t = t.replace(/^xlink:?/, ""));null == r || !1 === r ? u ? e.removeAttributeNS("http://www.w3.org/1999/xlink", t.toLowerCase()) : e.removeAttribute(t) : "function" != typeof r && (u ? e.setAttributeNS("http://www.w3.org/1999/xlink", t.toLowerCase(), r) : e.setAttribute(t, r));
       }
-    } else e.className = o || "";
-  }function s(e) {
-    return this.__l[e.type](L.event && L.event(e) || e);
-  }function _() {
-    var e;while (e = E.pop()) {
-      L.afterMount && L.afterMount(e), e.componentDidMount && e.componentDidMount();
+    } else e.className = r || "";
+  }function _(e) {
+    return this.__l[e.type](M.event && M.event(e) || e);
+  }function f() {
+    var e;while (e = A.shift()) {
+      M.afterMount && M.afterMount(e), e.componentDidMount && e.componentDidMount();
     }
   }function d(e, t, n, o, r, i) {
-    V++ || (A = null != r && void 0 !== r.ownerSVGElement, H = null != e && !("__preactattr_" in e));var l = f(e, t, n, o, i);return r && l.parentNode !== r && r.appendChild(l), --V || (H = !1, i || _()), l;
-  }function f(e, t, n, o, r) {
+    H++ || (R = null != r && void 0 !== r.ownerSVGElement, B = null != e && !("__preactattr_" in e));var l = h(e, t, n, o, i);return r && l.parentNode !== r && r.appendChild(l), --H || (B = !1, i || f()), l;
+  }function h(e, t, n, o, r) {
     var i = e,
-        a = A;if (null != t && "boolean" != typeof t || (t = ""), "string" == typeof t || "number" == typeof t) return e && void 0 !== e.splitText && e.parentNode && (!e._component || r) ? e.nodeValue != t && (e.nodeValue = t) : (i = document.createTextNode(t), e && (e.parentNode && e.parentNode.replaceChild(i, e), m(e, !0))), i.__preactattr_ = !0, i;var u = t.nodeName;if ("function" == typeof u) return x(e, t, n, o);if (A = "svg" === u || "foreignObject" !== u && A, u += "", (!e || !l(e, u)) && (i = p(u, A), e)) {
+        l = R;if (null != t && "boolean" != typeof t || (t = ""), "string" == typeof t || "number" == typeof t) return e && void 0 !== e.splitText && e.parentNode && (!e._component || r) ? e.nodeValue != t && (e.nodeValue = t) : (i = document.createTextNode(t), e && (e.parentNode && e.parentNode.replaceChild(i, e), v(e, !0))), i.__preactattr_ = !0, i;var u = t.nodeName;if ("function" == typeof u) return N(e, t, n, o);if (R = "svg" === u || "foreignObject" !== u && R, u += "", (!e || !a(e, u)) && (i = c(u, R), e)) {
       while (e.firstChild) {
         i.appendChild(e.firstChild);
-      }e.parentNode && e.parentNode.replaceChild(i, e), m(e, !0);
-    }var c = i.firstChild,
+      }e.parentNode && e.parentNode.replaceChild(i, e), v(e, !0);
+    }var p = i.firstChild,
         s = i.__preactattr_,
         _ = t.children;if (null == s) {
-      s = i.__preactattr_ = {};for (var d = i.attributes, f = d.length; f--;) {
-        s[d[f].name] = d[f].value;
+      s = i.__preactattr_ = {};for (var f = i.attributes, d = f.length; d--;) {
+        s[f[d].name] = f[d].value;
       }
-    }return !H && _ && 1 === _.length && "string" == typeof _[0] && null != c && void 0 !== c.splitText && null == c.nextSibling ? c.nodeValue != _[0] && (c.nodeValue = _[0]) : (_ && _.length || null != c) && h(i, _, n, o, H || null != s.dangerouslySetInnerHTML), b(i, t.attributes, s), A = a, i;
-  }function h(e, t, n, o, r) {
-    var l,
+    }return !B && _ && 1 === _.length && "string" == typeof _[0] && null != p && void 0 !== p.splitText && null == p.nextSibling ? p.nodeValue != _[0] && (p.nodeValue = _[0]) : (_ && _.length || null != p) && m(i, _, n, o, B || null != s.dangerouslySetInnerHTML), y(i, t.attributes, s), R = l, i;
+  }function m(e, t, n, o, r) {
+    var i,
         a,
-        p,
+        u,
         c,
         s,
         _ = e.childNodes,
-        d = [],
-        h = {},
-        v = 0,
+        f = [],
+        d = {},
+        m = 0,
         b = 0,
         y = _.length,
         g = 0,
         w = t ? t.length : 0;if (0 !== y) for (var C = 0; C < y; C++) {
       var x = _[C],
           N = x.__preactattr_,
-          k = w && N ? x._component ? x._component.__k : N.key : null;null != k ? (v++, h[k] = x) : (N || (void 0 !== x.splitText ? !r || x.nodeValue.trim() : r)) && (d[g++] = x);
+          k = w && N ? x._component ? x._component.__k : N.key : null;null != k ? (m++, d[k] = x) : (N || (void 0 !== x.splitText ? !r || x.nodeValue.trim() : r)) && (f[g++] = x);
     }if (0 !== w) for (var C = 0; C < w; C++) {
-      c = t[C], s = null;var k = c.key;if (null != k) v && void 0 !== h[k] && (s = h[k], h[k] = void 0, v--);else if (b < g) for (l = b; l < g; l++) {
-        if (void 0 !== d[l] && i(a = d[l], c, r)) {
-          s = a, d[l] = void 0, l === g - 1 && g--, l === b && b++;break;
+      c = t[C], s = null;var k = c.key;if (null != k) m && void 0 !== d[k] && (s = d[k], d[k] = void 0, m--);else if (b < g) for (i = b; i < g; i++) {
+        if (void 0 !== f[i] && l(a = f[i], c, r)) {
+          s = a, f[i] = void 0, i === g - 1 && g--, i === b && b++;break;
         }
-      }s = f(s, c, n, o), p = _[C], s && s !== e && s !== p && (null == p ? e.appendChild(s) : s === p.nextSibling ? u(p) : e.insertBefore(s, p));
-    }if (v) for (var C in h) {
-      void 0 !== h[C] && m(h[C], !1);
+      }s = h(s, c, n, o), u = _[C], s && s !== e && s !== u && (null == u ? e.appendChild(s) : s === u.nextSibling ? p(u) : e.insertBefore(s, u));
+    }if (m) for (var C in d) {
+      void 0 !== d[C] && v(d[C], !1);
     }while (b <= g) {
-      void 0 !== (s = d[g--]) && m(s, !1);
+      void 0 !== (s = f[g--]) && v(s, !1);
     }
-  }function m(e, t) {
-    var n = e._component;n ? N(n) : (null != e.__preactattr_ && e.__preactattr_.ref && e.__preactattr_.ref(null), !1 !== t && null != e.__preactattr_ || u(e), v(e));
-  }function v(e) {
+  }function v(e, t) {
+    var o = e._component;o ? k(o) : (null != e.__preactattr_ && n(e.__preactattr_.ref, null), !1 !== t && null != e.__preactattr_ || p(e), b(e));
+  }function b(e) {
     e = e.lastChild;while (e) {
-      var t = e.previousSibling;m(e, !0), e = t;
-    }
-  }function b(e, t, n) {
-    var o;for (o in n) {
-      t && null != t[o] || null == n[o] || c(e, o, n[o], n[o] = void 0, A);
-    }for (o in t) {
-      "children" === o || "innerHTML" === o || o in n && t[o] === ("value" === o || "checked" === o ? e[o] : n[o]) || c(e, o, n[o], n[o] = t[o], A);
+      var t = e.previousSibling;v(e, !0), e = t;
     }
   }function y(e, t, n) {
-    var o,
-        r = B.length;e.prototype && e.prototype.render ? (o = new e(t, n), k.call(o, t, n)) : (o = new k(t, n), o.constructor = e, o.render = g);while (r--) {
-      if (B[r].constructor === e) return o.__b = B[r].__b, B.splice(r, 1), o;
-    }return o;
+    var o;for (o in n) {
+      t && null != t[o] || null == n[o] || s(e, o, n[o], n[o] = void 0, R);
+    }for (o in t) {
+      "children" === o || "innerHTML" === o || o in n && t[o] === ("value" === o || "checked" === o ? e[o] : n[o]) || s(e, o, n[o], n[o] = t[o], R);
+    }
   }function g(e, t, n) {
+    var o,
+        r = F.length;e.prototype && e.prototype.render ? (o = new e(t, n), U.call(o, t, n)) : (o = new U(t, n), o.constructor = e, o.render = w);while (r--) {
+      if (F[r].constructor === e) return o.__b = F[r].__b, F.splice(r, 1), o;
+    }return o;
+  }function w(e, t, n) {
     return this.constructor(e, n);
-  }function w(e, t, n, r, i) {
-    e.__x || (e.__x = !0, e.__r = t.ref, e.__k = t.key, delete t.ref, delete t.key, void 0 === e.constructor.getDerivedStateFromProps && (!e.base || i ? e.componentWillMount && e.componentWillMount() : e.componentWillReceiveProps && e.componentWillReceiveProps(t, r)), r && r !== e.context && (e.__c || (e.__c = e.context), e.context = r), e.__p || (e.__p = e.props), e.props = t, e.__x = !1, 0 !== n && (1 !== n && !1 === L.syncComponentUpdates && e.base ? o(e) : C(e, 1, i)), e.__r && e.__r(e));
-  }function C(e, n, o, r) {
+  }function C(e, t, o, i, l) {
+    e.__x || (e.__x = !0, e.__r = t.ref, e.__k = t.key, delete t.ref, delete t.key, void 0 === e.constructor.getDerivedStateFromProps && (!e.base || l ? e.componentWillMount && e.componentWillMount() : e.componentWillReceiveProps && e.componentWillReceiveProps(t, i)), i && i !== e.context && (e.__c || (e.__c = e.context), e.context = i), e.__p || (e.__p = e.props), e.props = t, e.__x = !1, 0 !== o && (1 !== o && !1 === M.syncComponentUpdates && e.base ? r(e) : x(e, 1, l)), n(e.__r, e));
+  }function x(e, n, o, r) {
     if (!e.__x) {
       var i,
           l,
-          p,
-          u = e.props,
-          c = e.state,
+          a,
+          c = e.props,
+          p = e.state,
           s = e.context,
-          f = e.__p || u,
-          h = e.__s || c,
-          v = e.__c || s,
+          _ = e.__p || c,
+          h = e.__s || p,
+          m = e.__c || s,
           b = e.base,
-          g = e.__b,
-          x = b || g,
-          k = e._component,
+          y = e.__b,
+          w = b || y,
+          N = e._component,
           U = !1,
-          S = v;if (e.constructor.getDerivedStateFromProps && (c = t(t({}, c), e.constructor.getDerivedStateFromProps(u, c)), e.state = c), b && (e.props = f, e.state = h, e.context = v, 2 !== n && e.shouldComponentUpdate && !1 === e.shouldComponentUpdate(u, c, s) ? U = !0 : e.componentWillUpdate && e.componentWillUpdate(u, c, s), e.props = u, e.state = c, e.context = s), e.__p = e.__s = e.__c = e.__b = null, e.__d = !1, !U) {
-        i = e.render(u, c, s), e.getChildContext && (s = t(t({}, s), e.getChildContext())), b && e.getSnapshotBeforeUpdate && (S = e.getSnapshotBeforeUpdate(f, h));var T,
-            M,
+          S = m;if (e.constructor.getDerivedStateFromProps && (p = t(t({}, p), e.constructor.getDerivedStateFromProps(c, p)), e.state = p), b && (e.props = _, e.state = h, e.context = m, 2 !== n && e.shouldComponentUpdate && !1 === e.shouldComponentUpdate(c, p, s) ? U = !0 : e.componentWillUpdate && e.componentWillUpdate(c, p, s), e.props = c, e.state = p, e.context = s), e.__p = e.__s = e.__c = e.__b = null, e.__d = !1, !U) {
+        i = e.render(c, p, s), e.getChildContext && (s = t(t({}, s), e.getChildContext())), b && e.getSnapshotBeforeUpdate && (S = e.getSnapshotBeforeUpdate(_, h));var L,
+            T,
             P = i && i.nodeName;if ("function" == typeof P) {
-          var W = a(i);l = k, l && l.constructor === P && W.key == l.__k ? w(l, W, 1, s, !1) : (T = l, e._component = l = y(P, W, s), l.__b = l.__b || g, l.__u = e, w(l, W, 0, s, !1), C(l, 1, o, !0)), M = l.base;
-        } else p = x, T = k, T && (p = e._component = null), (x || 1 === n) && (p && (p._component = null), M = d(p, i, s, o || !b, x && x.parentNode, !0));if (x && M !== x && l !== k) {
-          var D = x.parentNode;D && M !== D && (D.replaceChild(M, x), T || (x._component = null, m(x, !1)));
-        }if (T && N(T), e.base = M, M && !r) {
-          var A = e,
-              H = e;while (H = H.__u) {
-            (A = H).base = M;
-          }M._component = A, M._componentConstructor = A.constructor;
+          var W = u(i);l = N, l && l.constructor === P && W.key == l.__k ? C(l, W, 1, s, !1) : (L = l, e._component = l = g(P, W, s), l.__b = l.__b || y, l.__u = e, C(l, W, 0, s, !1), x(l, 1, o, !0)), T = l.base;
+        } else a = w, L = N, L && (a = e._component = null), (w || 1 === n) && (a && (a._component = null), T = d(a, i, s, o || !b, w && w.parentNode, !0));if (w && T !== w && l !== N) {
+          var D = w.parentNode;D && T !== D && (D.replaceChild(T, w), L || (w._component = null, v(w, !1)));
+        }if (L && k(L), e.base = T, T && !r) {
+          var E = e,
+              V = e;while (V = V.__u) {
+            (E = V).base = T;
+          }T._component = E, T._componentConstructor = E.constructor;
         }
-      }!b || o ? E.unshift(e) : U || (e.componentDidUpdate && e.componentDidUpdate(f, h, S), L.afterUpdate && L.afterUpdate(e));while (e.__h.length) {
+      }!b || o ? A.push(e) : U || (e.componentDidUpdate && e.componentDidUpdate(_, h, S), M.afterUpdate && M.afterUpdate(e));while (e.__h.length) {
         e.__h.pop().call(e);
-      }V || r || _();
+      }H || r || f();
     }
-  }function x(e, t, n, o) {
+  }function N(e, t, n, o) {
     var r = e && e._component,
         i = r,
         l = e,
-        p = r && e._componentConstructor === t.nodeName,
-        u = p,
-        c = a(t);while (r && !u && (r = r.__u)) {
-      u = r.constructor === t.nodeName;
-    }return r && u && (!o || r._component) ? (w(r, c, 3, n, o), e = r.base) : (i && !p && (N(i), e = l = null), r = y(t.nodeName, c, n), e && !r.__b && (r.__b = e, l = null), w(r, c, 1, n, o), e = r.base, l && e !== l && (l._component = null, m(l, !1))), e;
-  }function N(e) {
-    L.beforeUnmount && L.beforeUnmount(e);var t = e.base;e.__x = !0, e.componentWillUnmount && e.componentWillUnmount(), e.base = null;var n = e._component;n ? N(n) : t && (t.__preactattr_ && t.__preactattr_.ref && t.__preactattr_.ref(null), e.__b = t, u(t), B.push(e), v(t)), e.__r && e.__r(null);
-  }function k(e, t) {
+        a = r && e._componentConstructor === t.nodeName,
+        c = a,
+        p = u(t);while (r && !c && (r = r.__u)) {
+      c = r.constructor === t.nodeName;
+    }return r && c && (!o || r._component) ? (C(r, p, 3, n, o), e = r.base) : (i && !a && (k(i), e = l = null), r = g(t.nodeName, p, n), e && !r.__b && (r.__b = e, l = null), C(r, p, 1, n, o), e = r.base, l && e !== l && (l._component = null, v(l, !1))), e;
+  }function k(e) {
+    M.beforeUnmount && M.beforeUnmount(e);var t = e.base;e.__x = !0, e.componentWillUnmount && e.componentWillUnmount(), e.base = null;var o = e._component;o ? k(o) : t && (null != t.__preactattr_ && n(t.__preactattr_.ref, null), e.__b = t, p(t), F.push(e), b(t)), n(e.__r, null);
+  }function U(e, t) {
     this.__d = !0, this.context = t, this.props = e, this.state = this.state || {}, this.__h = [];
-  }function U(e, t, n) {
+  }function S(e, t, n) {
     return d(n, e, {}, !1, t, !1);
-  }var S = function S() {},
-      L = {},
-      T = [],
-      M = [],
-      P = "function" == typeof Promise ? Promise.resolve().then.bind(Promise.resolve()) : setTimeout,
-      W = /acit|ex(?:s|g|n|p|$)|rph|ows|mnc|ntw|ine[ch]|zoo|^ord/i,
-      D = [],
-      E = [],
-      V = 0,
-      A = !1,
-      H = !1,
-      B = [];t(k.prototype, { setState: function setState(e, n) {
-      var r = this.__s = this.state;"function" == typeof e && (e = e(r, this.props)), this.state = t(t({}, r), e), n && this.__h.push(n), o(this);
+  }function L() {
+    return {};
+  }var T = function T() {},
+      M = {},
+      P = [],
+      W = [],
+      D = "function" == typeof Promise ? Promise.resolve().then.bind(Promise.resolve()) : setTimeout,
+      E = /acit|ex(?:s|g|n|p|$)|rph|ows|mnc|ntw|ine[ch]|zoo|^ord/i,
+      V = [],
+      A = [],
+      H = 0,
+      R = !1,
+      B = !1,
+      F = [];t(U.prototype, { setState: function setState(e, n) {
+      this.__s || (this.__s = this.state), this.state = t(t({}, this.state), "function" == typeof e ? e(this.state, this.props) : e), n && this.__h.push(n), r(this);
     }, forceUpdate: function forceUpdate(e) {
-      e && this.__h.push(e), C(this, 2);
-    }, render: function render() {} });var F = { h: e, createElement: e, cloneElement: n, Component: k, render: U, rerender: r, options: L }; true ? module.exports = F : self.preact = F;
+      e && this.__h.push(e), x(this, 2);
+    }, render: function render() {} });var j = { h: e, createElement: e, cloneElement: o, createRef: L, Component: U, render: S, rerender: i, options: M }; true ? module.exports = j : self.preact = j;
 }();
 //# sourceMappingURL=preact.min.js.map
-
-/***/ }),
-
-/***/ "UyDz":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-
-
-/**
- * Use invariant() to assert state which your program assumes to be true.
- *
- * Provide sprintf-style format (only %s is supported) and arguments
- * to provide information about what broke and what you were
- * expecting.
- *
- * The invariant message will be stripped in production, but the invariant
- * will remain to ensure logic does not differ in production.
- */
-
-var NODE_ENV = "production";
-
-var invariant = function invariant(condition, format, a, b, c, d, e, f) {
-  if (NODE_ENV !== 'production') {
-    if (format === undefined) {
-      throw new Error('invariant requires an error message argument');
-    }
-  }
-
-  if (!condition) {
-    var error;
-    if (format === undefined) {
-      error = new Error('Minified exception occurred; use the non-minified dev environment ' + 'for the full error message and additional helpful warnings.');
-    } else {
-      var args = [a, b, c, d, e, f];
-      var argIndex = 0;
-      error = new Error(format.replace(/%s/g, function () {
-        return args[argIndex++];
-      }));
-      error.name = 'Invariant Violation';
-    }
-
-    error.framesToPop = 1; // we don't care about invariant's own frame
-    throw error;
-  }
-};
-
-module.exports = invariant;
 
 /***/ }),
 
@@ -2583,88 +3391,24 @@ module.exports = Markdown;
 function Markdown(props, opts) {
   opts = opts || {};
   var h = opts.h || preact.h;
+  var markdown, markupOpts, markdownOpts;
   if (typeof props === 'string') {
-    var markupOpts = opts.markupOpts || {};
-    var markdownOpts = opts.markdownOpts || {};
-    return h(Markup, _extends({
-      markup: marked(props, markdownOpts),
-      trim: false,
-      type: 'html'
-    }, opts.markupOpts));
+    markdown = props;
+    props = {};
   } else if (props && typeof props.markdown === 'string') {
-    var markupOpts = props.markupOpts || opts.markupOpts || {};
-    var markdownOpts = props.markdownOpts || opts.markdownOpts || {};
-    return h(Markup, _extends({
-      markup: marked(props.markdown, markdownOpts),
-      trim: false,
-      type: 'html'
-    }, markupOpts));
+    markdown = props.markdown;
   } else {
     throw new Error('Invalid arguments. Markdown requires either a `<String>` or object: `{markdown: <String>}`');
   }
+
+  var markupOpts = props.markupOpts || opts.markupOpts || {};
+  var markdownOpts = props.markdownOpts || opts.markdownOpts || {};
+  return h(Markup, _extends({
+    markup: marked(markdown, markdownOpts),
+    trim: false,
+    type: 'html'
+  }, markupOpts));
 }
-
-/***/ }),
-
-/***/ "XOCG":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/**
- * Copyright 2014-2015, Facebook, Inc.
- * All rights reserved.
- *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
- */
-
-
-
-/**
- * Similar to invariant but only logs a warning if the condition is not met.
- * This can be used to log issues in development environments in critical
- * paths. Removing the logging code for production environments will keep the
- * same logic and follow the same code paths.
- */
-
-var __DEV__ = "production" !== 'production';
-
-var warning = function warning() {};
-
-if (__DEV__) {
-  warning = function warning(condition, format, args) {
-    var len = arguments.length;
-    args = new Array(len > 2 ? len - 2 : 0);
-    for (var key = 2; key < len; key++) {
-      args[key - 2] = arguments[key];
-    }
-    if (format === undefined) {
-      throw new Error('`warning(condition, format, ...args)` requires a warning ' + 'message argument');
-    }
-
-    if (format.length < 10 || /^[s\W]*$/.test(format)) {
-      throw new Error('The warning format should be able to uniquely identify this ' + 'warning. Please, use a more descriptive format than: ' + format);
-    }
-
-    if (!condition) {
-      var argIndex = 0;
-      var message = 'Warning: ' + format.replace(/%s/g, function () {
-        return args[argIndex++];
-      });
-      if (typeof console !== 'undefined') {
-        console.error(message);
-      }
-      try {
-        // This error was thrown as a convenience so that you can use this stack
-        // to find the callsite that caused this warning to fire.
-        throw new Error(message);
-      } catch (x) {}
-    }
-  };
-}
-
-module.exports = warning;
 
 /***/ }),
 
@@ -2963,553 +3707,6 @@ module.exports = warning;
   return Markup;
 });
 //# sourceMappingURL=preact-markup.js.map
-
-/***/ }),
-
-/***/ "nqnI":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-exports.__esModule = true;
-
-var _extends = Object.assign || function (target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i];for (var key in source) {
-      if (Object.prototype.hasOwnProperty.call(source, key)) {
-        target[key] = source[key];
-      }
-    }
-  }return target;
-};
-
-var _warning = __webpack_require__("XOCG");
-
-var _warning2 = _interopRequireDefault(_warning);
-
-var _invariant = __webpack_require__("UyDz");
-
-var _invariant2 = _interopRequireDefault(_invariant);
-
-var _LocationUtils = __webpack_require__("vMhP");
-
-var _PathUtils = __webpack_require__("4gcd");
-
-var _createTransitionManager = __webpack_require__("/Uqj");
-
-var _createTransitionManager2 = _interopRequireDefault(_createTransitionManager);
-
-var _DOMUtils = __webpack_require__("uE+1");
-
-function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : { default: obj };
-}
-
-var HashChangeEvent = 'hashchange';
-
-var HashPathCoders = {
-  hashbang: {
-    encodePath: function encodePath(path) {
-      return path.charAt(0) === '!' ? path : '!/' + (0, _PathUtils.stripLeadingSlash)(path);
-    },
-    decodePath: function decodePath(path) {
-      return path.charAt(0) === '!' ? path.substr(1) : path;
-    }
-  },
-  noslash: {
-    encodePath: _PathUtils.stripLeadingSlash,
-    decodePath: _PathUtils.addLeadingSlash
-  },
-  slash: {
-    encodePath: _PathUtils.addLeadingSlash,
-    decodePath: _PathUtils.addLeadingSlash
-  }
-};
-
-var getHashPath = function getHashPath() {
-  // We can't use window.location.hash here because it's not
-  // consistent across browsers - Firefox will pre-decode it!
-  var href = window.location.href;
-  var hashIndex = href.indexOf('#');
-  return hashIndex === -1 ? '' : href.substring(hashIndex + 1);
-};
-
-var pushHashPath = function pushHashPath(path) {
-  return window.location.hash = path;
-};
-
-var replaceHashPath = function replaceHashPath(path) {
-  var hashIndex = window.location.href.indexOf('#');
-
-  window.location.replace(window.location.href.slice(0, hashIndex >= 0 ? hashIndex : 0) + '#' + path);
-};
-
-var createHashHistory = function createHashHistory() {
-  var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-  (0, _invariant2.default)(_DOMUtils.canUseDOM, 'Hash history needs a DOM');
-
-  var globalHistory = window.history;
-  var canGoWithoutReload = (0, _DOMUtils.supportsGoWithoutReloadUsingHash)();
-
-  var _props$getUserConfirm = props.getUserConfirmation,
-      getUserConfirmation = _props$getUserConfirm === undefined ? _DOMUtils.getConfirmation : _props$getUserConfirm,
-      _props$hashType = props.hashType,
-      hashType = _props$hashType === undefined ? 'slash' : _props$hashType;
-
-  var basename = props.basename ? (0, _PathUtils.stripTrailingSlash)((0, _PathUtils.addLeadingSlash)(props.basename)) : '';
-
-  var _HashPathCoders$hashT = HashPathCoders[hashType],
-      encodePath = _HashPathCoders$hashT.encodePath,
-      decodePath = _HashPathCoders$hashT.decodePath;
-
-  var getDOMLocation = function getDOMLocation() {
-    var path = decodePath(getHashPath());
-
-    (0, _warning2.default)(!basename || (0, _PathUtils.hasBasename)(path, basename), 'You are attempting to use a basename on a page whose URL path does not begin ' + 'with the basename. Expected path "' + path + '" to begin with "' + basename + '".');
-
-    if (basename) path = (0, _PathUtils.stripBasename)(path, basename);
-
-    return (0, _LocationUtils.createLocation)(path);
-  };
-
-  var transitionManager = (0, _createTransitionManager2.default)();
-
-  var setState = function setState(nextState) {
-    _extends(history, nextState);
-
-    history.length = globalHistory.length;
-
-    transitionManager.notifyListeners(history.location, history.action);
-  };
-
-  var forceNextPop = false;
-  var ignorePath = null;
-
-  var handleHashChange = function handleHashChange() {
-    var path = getHashPath();
-    var encodedPath = encodePath(path);
-
-    if (path !== encodedPath) {
-      // Ensure we always have a properly-encoded hash.
-      replaceHashPath(encodedPath);
-    } else {
-      var location = getDOMLocation();
-      var prevLocation = history.location;
-
-      if (!forceNextPop && (0, _LocationUtils.locationsAreEqual)(prevLocation, location)) return; // A hashchange doesn't always == location change.
-
-      if (ignorePath === (0, _PathUtils.createPath)(location)) return; // Ignore this change; we already setState in push/replace.
-
-      ignorePath = null;
-
-      handlePop(location);
-    }
-  };
-
-  var handlePop = function handlePop(location) {
-    if (forceNextPop) {
-      forceNextPop = false;
-      setState();
-    } else {
-      var action = 'POP';
-
-      transitionManager.confirmTransitionTo(location, action, getUserConfirmation, function (ok) {
-        if (ok) {
-          setState({ action: action, location: location });
-        } else {
-          revertPop(location);
-        }
-      });
-    }
-  };
-
-  var revertPop = function revertPop(fromLocation) {
-    var toLocation = history.location;
-
-    // TODO: We could probably make this more reliable by
-    // keeping a list of paths we've seen in sessionStorage.
-    // Instead, we just default to 0 for paths we don't know.
-
-    var toIndex = allPaths.lastIndexOf((0, _PathUtils.createPath)(toLocation));
-
-    if (toIndex === -1) toIndex = 0;
-
-    var fromIndex = allPaths.lastIndexOf((0, _PathUtils.createPath)(fromLocation));
-
-    if (fromIndex === -1) fromIndex = 0;
-
-    var delta = toIndex - fromIndex;
-
-    if (delta) {
-      forceNextPop = true;
-      go(delta);
-    }
-  };
-
-  // Ensure the hash is encoded properly before doing anything else.
-  var path = getHashPath();
-  var encodedPath = encodePath(path);
-
-  if (path !== encodedPath) replaceHashPath(encodedPath);
-
-  var initialLocation = getDOMLocation();
-  var allPaths = [(0, _PathUtils.createPath)(initialLocation)];
-
-  // Public interface
-
-  var createHref = function createHref(location) {
-    return '#' + encodePath(basename + (0, _PathUtils.createPath)(location));
-  };
-
-  var push = function push(path, state) {
-    (0, _warning2.default)(state === undefined, 'Hash history cannot push state; it is ignored');
-
-    var action = 'PUSH';
-    var location = (0, _LocationUtils.createLocation)(path, undefined, undefined, history.location);
-
-    transitionManager.confirmTransitionTo(location, action, getUserConfirmation, function (ok) {
-      if (!ok) return;
-
-      var path = (0, _PathUtils.createPath)(location);
-      var encodedPath = encodePath(basename + path);
-      var hashChanged = getHashPath() !== encodedPath;
-
-      if (hashChanged) {
-        // We cannot tell if a hashchange was caused by a PUSH, so we'd
-        // rather setState here and ignore the hashchange. The caveat here
-        // is that other hash histories in the page will consider it a POP.
-        ignorePath = path;
-        pushHashPath(encodedPath);
-
-        var prevIndex = allPaths.lastIndexOf((0, _PathUtils.createPath)(history.location));
-        var nextPaths = allPaths.slice(0, prevIndex === -1 ? 0 : prevIndex + 1);
-
-        nextPaths.push(path);
-        allPaths = nextPaths;
-
-        setState({ action: action, location: location });
-      } else {
-        (0, _warning2.default)(false, 'Hash history cannot PUSH the same path; a new entry will not be added to the history stack');
-
-        setState();
-      }
-    });
-  };
-
-  var replace = function replace(path, state) {
-    (0, _warning2.default)(state === undefined, 'Hash history cannot replace state; it is ignored');
-
-    var action = 'REPLACE';
-    var location = (0, _LocationUtils.createLocation)(path, undefined, undefined, history.location);
-
-    transitionManager.confirmTransitionTo(location, action, getUserConfirmation, function (ok) {
-      if (!ok) return;
-
-      var path = (0, _PathUtils.createPath)(location);
-      var encodedPath = encodePath(basename + path);
-      var hashChanged = getHashPath() !== encodedPath;
-
-      if (hashChanged) {
-        // We cannot tell if a hashchange was caused by a REPLACE, so we'd
-        // rather setState here and ignore the hashchange. The caveat here
-        // is that other hash histories in the page will consider it a POP.
-        ignorePath = path;
-        replaceHashPath(encodedPath);
-      }
-
-      var prevIndex = allPaths.indexOf((0, _PathUtils.createPath)(history.location));
-
-      if (prevIndex !== -1) allPaths[prevIndex] = path;
-
-      setState({ action: action, location: location });
-    });
-  };
-
-  var go = function go(n) {
-    (0, _warning2.default)(canGoWithoutReload, 'Hash history go(n) causes a full page reload in this browser');
-
-    globalHistory.go(n);
-  };
-
-  var goBack = function goBack() {
-    return go(-1);
-  };
-
-  var goForward = function goForward() {
-    return go(1);
-  };
-
-  var listenerCount = 0;
-
-  var checkDOMListeners = function checkDOMListeners(delta) {
-    listenerCount += delta;
-
-    if (listenerCount === 1) {
-      (0, _DOMUtils.addEventListener)(window, HashChangeEvent, handleHashChange);
-    } else if (listenerCount === 0) {
-      (0, _DOMUtils.removeEventListener)(window, HashChangeEvent, handleHashChange);
-    }
-  };
-
-  var isBlocked = false;
-
-  var block = function block() {
-    var prompt = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
-
-    var unblock = transitionManager.setPrompt(prompt);
-
-    if (!isBlocked) {
-      checkDOMListeners(1);
-      isBlocked = true;
-    }
-
-    return function () {
-      if (isBlocked) {
-        isBlocked = false;
-        checkDOMListeners(-1);
-      }
-
-      return unblock();
-    };
-  };
-
-  var listen = function listen(listener) {
-    var unlisten = transitionManager.appendListener(listener);
-    checkDOMListeners(1);
-
-    return function () {
-      checkDOMListeners(-1);
-      unlisten();
-    };
-  };
-
-  var history = {
-    length: globalHistory.length,
-    action: 'POP',
-    location: initialLocation,
-    createHref: createHref,
-    push: push,
-    replace: replace,
-    go: go,
-    goBack: goBack,
-    goForward: goForward,
-    block: block,
-    listen: listen
-  };
-
-  return history;
-};
-
-exports.default = createHashHistory;
-
-/***/ }),
-
-/***/ "t+Vk":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
-  return typeof obj;
-} : function (obj) {
-  return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-};
-
-function valueEqual(a, b) {
-  if (a === b) return true;
-
-  if (a == null || b == null) return false;
-
-  if (Array.isArray(a)) {
-    return Array.isArray(b) && a.length === b.length && a.every(function (item, index) {
-      return valueEqual(item, b[index]);
-    });
-  }
-
-  var aType = typeof a === 'undefined' ? 'undefined' : _typeof(a);
-  var bType = typeof b === 'undefined' ? 'undefined' : _typeof(b);
-
-  if (aType !== bType) return false;
-
-  if (aType === 'object') {
-    var aValue = a.valueOf();
-    var bValue = b.valueOf();
-
-    if (aValue !== a || bValue !== b) return valueEqual(aValue, bValue);
-
-    var aKeys = Object.keys(a);
-    var bKeys = Object.keys(b);
-
-    if (aKeys.length !== bKeys.length) return false;
-
-    return aKeys.every(function (key) {
-      return valueEqual(a[key], b[key]);
-    });
-  }
-
-  return false;
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (valueEqual);
-
-/***/ }),
-
-/***/ "uE+1":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-exports.__esModule = true;
-var canUseDOM = exports.canUseDOM = !!(typeof window !== 'undefined' && window.document && window.document.createElement);
-
-var addEventListener = exports.addEventListener = function addEventListener(node, event, listener) {
-  return node.addEventListener ? node.addEventListener(event, listener, false) : node.attachEvent('on' + event, listener);
-};
-
-var removeEventListener = exports.removeEventListener = function removeEventListener(node, event, listener) {
-  return node.removeEventListener ? node.removeEventListener(event, listener, false) : node.detachEvent('on' + event, listener);
-};
-
-var getConfirmation = exports.getConfirmation = function getConfirmation(message, callback) {
-  return callback(window.confirm(message));
-}; // eslint-disable-line no-alert
-
-/**
- * Returns true if the HTML5 history API is supported. Taken from Modernizr.
- *
- * https://github.com/Modernizr/Modernizr/blob/master/LICENSE
- * https://github.com/Modernizr/Modernizr/blob/master/feature-detects/history.js
- * changed to avoid false negatives for Windows Phones: https://github.com/reactjs/react-router/issues/586
- */
-var supportsHistory = exports.supportsHistory = function supportsHistory() {
-  var ua = window.navigator.userAgent;
-
-  if ((ua.indexOf('Android 2.') !== -1 || ua.indexOf('Android 4.0') !== -1) && ua.indexOf('Mobile Safari') !== -1 && ua.indexOf('Chrome') === -1 && ua.indexOf('Windows Phone') === -1) return false;
-
-  return window.history && 'pushState' in window.history;
-};
-
-/**
- * Returns true if browser fires popstate on hash change.
- * IE10 and IE11 do not.
- */
-var supportsPopStateOnHashChange = exports.supportsPopStateOnHashChange = function supportsPopStateOnHashChange() {
-  return window.navigator.userAgent.indexOf('Trident') === -1;
-};
-
-/**
- * Returns false if using go(n) with hash history causes a full page reload.
- */
-var supportsGoWithoutReloadUsingHash = exports.supportsGoWithoutReloadUsingHash = function supportsGoWithoutReloadUsingHash() {
-  return window.navigator.userAgent.indexOf('Firefox') === -1;
-};
-
-/**
- * Returns true if a given popstate event is an extraneous WebKit event.
- * Accounts for the fact that Chrome on iOS fires real popstate events
- * containing undefined state when pressing the back button.
- */
-var isExtraneousPopstateEvent = exports.isExtraneousPopstateEvent = function isExtraneousPopstateEvent(event) {
-  return event.state === undefined && navigator.userAgent.indexOf('CriOS') === -1;
-};
-
-/***/ }),
-
-/***/ "vMhP":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-exports.__esModule = true;
-exports.locationsAreEqual = exports.createLocation = undefined;
-
-var _extends = Object.assign || function (target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i];for (var key in source) {
-      if (Object.prototype.hasOwnProperty.call(source, key)) {
-        target[key] = source[key];
-      }
-    }
-  }return target;
-};
-
-var _resolvePathname = __webpack_require__("7YO4");
-
-var _resolvePathname2 = _interopRequireDefault(_resolvePathname);
-
-var _valueEqual = __webpack_require__("t+Vk");
-
-var _valueEqual2 = _interopRequireDefault(_valueEqual);
-
-var _PathUtils = __webpack_require__("4gcd");
-
-function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : { default: obj };
-}
-
-var createLocation = exports.createLocation = function createLocation(path, state, key, currentLocation) {
-  var location = void 0;
-  if (typeof path === 'string') {
-    // Two-arg form: push(path, state)
-    location = (0, _PathUtils.parsePath)(path);
-    location.state = state;
-  } else {
-    // One-arg form: push(location)
-    location = _extends({}, path);
-
-    if (location.pathname === undefined) location.pathname = '';
-
-    if (location.search) {
-      if (location.search.charAt(0) !== '?') location.search = '?' + location.search;
-    } else {
-      location.search = '';
-    }
-
-    if (location.hash) {
-      if (location.hash.charAt(0) !== '#') location.hash = '#' + location.hash;
-    } else {
-      location.hash = '';
-    }
-
-    if (state !== undefined && location.state === undefined) location.state = state;
-  }
-
-  try {
-    location.pathname = decodeURI(location.pathname);
-  } catch (e) {
-    if (e instanceof URIError) {
-      throw new URIError('Pathname "' + location.pathname + '" could not be decoded. ' + 'This is likely caused by an invalid percent-encoding.');
-    } else {
-      throw e;
-    }
-  }
-
-  if (key) location.key = key;
-
-  if (currentLocation) {
-    // Resolve incomplete/relative pathname relative to current location.
-    if (!location.pathname) {
-      location.pathname = currentLocation.pathname;
-    } else if (location.pathname.charAt(0) !== '/') {
-      location.pathname = (0, _resolvePathname2.default)(location.pathname, currentLocation.pathname);
-    }
-  } else {
-    // When there is no prior location and pathname is empty, set it to /
-    if (!location.pathname) {
-      location.pathname = '/';
-    }
-  }
-
-  return location;
-};
-
-var locationsAreEqual = exports.locationsAreEqual = function locationsAreEqual(a, b) {
-  return a.pathname === b.pathname && a.search === b.search && a.hash === b.hash && a.key === b.key && (0, _valueEqual2.default)(a.state, b.state);
-};
 
 /***/ })
 
