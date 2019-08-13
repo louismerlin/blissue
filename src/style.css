@@ -1,30 +1,26 @@
-.blog-title {
-  text-align: center;
-  font-size: 3rem;
-  margin-bottom: 4rem;
+.no-decoration {
+  text-decoration: none;
+}
+
+.container {
+  max-width: 64rem;
 }
 
 .post-title {
-  font-size: 3rem;
   margin-bottom: 0;
 }
 
 .post-date {
+  font-weight: normal;
   margin-top: 0;
-  margin-bottom: 4rem;
-  border-bottom: solid 0.1rem black;
-  text-align: right;
 }
 
 .reactions {
-  padding-top: 6rem;
+  padding: 3rem 0;
   text-decoration: none;
   text-align: center;
 }
 
 .footer {
-  border: solid 0.1rem black;
-  padding: 0 1rem;
-  margin-top: 10rem;
-  margin-bottom: 4rem;
+  margin-bottom: 2rem;
 }

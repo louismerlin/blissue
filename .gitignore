@@ -62,3 +62,7 @@ typings/
 
 # build
 build/
+
+# parcel directories
+dist
+.cache

@@ -1,33 +1,39 @@
 {
-  "private": true,
   "name": "blissue",
-  "version": "0.2.0",
+  "version": "0.3.0",
+  "repository": "https://github.com/louismerlin/blissue.git",
+  "private": true,
+  "author": {
+    "name": "Louis Merlin",
+    "email": "louis_merlin1@yahoo.fr",
+    "url": "https://louismerl.in"
+  },
   "homepage": "https://louismerlin.github.io/blissue",
   "license": "MIT",
-  "scripts": {
-    "start": "if-env NODE_ENV=production && yarn run -s serve || yarn run -s dev",
-    "build": "preact build",
-    "serve": "preact build && preact serve",
-    "dev": "preact watch",
-    "lint": "standard",
-    "predeploy": "cross-env BLOG_NAME=blissue yarn build",
-    "deploy": "gh-pages -d build"
+  "dependencies": {
+    "concrete.css": "^1.1.1",
+    "history": "^4.9.0",
+    "marked": "^0.7.0",
+    "normalize.css": "^8.0.1",
+    "preact": "^10.0.0-rc.1",
+    "preact-markup": "^2.0.0",
+    "preact-router": "^3.0.0",
+    "reeq": "^1.6.0"
   },
   "devDependencies": {
-    "cross-env": "^5.2.0",
-    "gh-pages": "^1.2.0",
-    "if-env": "^1.0.0",
-    "preact-cli": "^2.2.1",
-    "standard": "^12.0.1"
+    "gh-pages": "^2.0.1",
+    "parcel-bundler": "^1.12.3",
+    "rimraf": "^2.6.3",
+    "standard": "^13.0.2"
   },
-  "dependencies": {
-    "concrete.css": "^0.1.1",
-    "history": "^4.7.2",
-    "normalize.css": "^8.0.1",
-    "preact": "^8.2.1",
-    "preact-compat": "^3.17.0",
-    "preact-markdown": "^0.4.0",
-    "preact-router": "^2.6.1",
-    "universal-ga": "^1.2.0"
-  }
+  "scripts": {
+    "start": "parcel src/index.html --port 3000 --hmr-port 1234",
+    "build": "parcel build src/index.html --experimental-scope-hoisting",
+    "predeploy": "rimraf dist && yarn build",
+    "deploy": "gh-pages -d dist",
+    "lint": "standard --fix"
+  },
+  "browserslist": [
+    "last 2 Chrome version"
+  ]
 }

@@ -1,0 +1,16 @@
+{
+  "name": "Blissue",
+  "short_name": "Blissue",
+  "start_url": "/blissue",
+  "display": "",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "description": "browser",
+  "icons": [
+    {
+      "src": "./hand.png",
+      "type": "image/png",
+      "sizes": "120x120"
+    }
+  ]
+}
