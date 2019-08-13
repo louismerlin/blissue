@@ -20,7 +20,7 @@ function App () {
 
   useEffect(() => {
     const getPosts = async () => {
-      let posts = await reeq(`https://api.github.com/repos/${USERNAME}/${BLOG_NAME}/issues?labels=post`, { headers: { 'Accept': '  application/vnd.github.squirrel-girl-preview' } })
+      let posts = await reeq(`https://api.github.com/repos/${USERNAME}/${BLOG_NAME}/issues?labels=post`, { headers: { Accept: '  application/vnd.github.squirrel-girl-preview' } })
       posts = posts.filter(p => p.author_association === 'OWNER')
       posts = posts.map(p => ({
         createdAt: new Date(p.created_at),
@@ -32,7 +32,7 @@ function App () {
   }, [])
 
   useEffect(() => {
-    const getAuthor= async () => {
+    const getAuthor = async () => {
       const author = await reeq(`https://api.github.com/users/${USERNAME}`)
       setAuthor(author)
     }

@@ -29,7 +29,7 @@
   "scripts": {
     "start": "parcel src/index.html --port 3000 --hmr-port 1234",
     "build": "parcel build src/index.html --experimental-scope-hoisting",
-    "predeploy": "rimraf dist && yarn build",
+    "predeploy": "rimraf dist && parcel build src/index.html --experimental-scope-hoisting --public-url /blissue/",
     "deploy": "gh-pages -d dist",
     "lint": "standard --fix"
   },
